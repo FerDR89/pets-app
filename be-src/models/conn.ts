@@ -2,11 +2,11 @@ import { Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize({
   dialect: "postgres",
-  username: process.env.HEROKU_USERNAME,
-  password: process.env.HEROKU_PASSWORD,
-  database: process.env.HEROKU_DATABASE,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   port: 5432,
-  host: process.env.HEROKU_HOST,
+  host: process.env.DB_HOST,
   ssl: true,
   // esto es necesario para que corra correctamente
   dialectOptions: {

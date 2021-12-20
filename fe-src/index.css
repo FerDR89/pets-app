@@ -1,0 +1,22 @@
+:root {
+  --font-color: #000;
+  --btn-bg1: #ff9df5;
+  --btn-bg2: #97ea9f;
+  --btn-bg3: #cdcdcd;
+  --header-bgc: #ff6868;
+  --menu-bgc: #8af1ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Odibee Sans", cursive;
+}
+
+.root {
+  max-width: 375px;
+  min-height: 100vh;
+}

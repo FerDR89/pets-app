@@ -4,6 +4,7 @@
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
+    "@types/node": "^17.0.1",
     "@vaadin/router": "^1.7.4",
     "algoliasearch": "^4.11.0",
     "cloudinary": "^1.27.1",

@@ -3,6 +3,7 @@ import * as path from "path";
 import * as cors from "cors";
 import { cloudinary } from "./lib/cloudinary";
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,11 +17,9 @@ app.get("/test", (req, res) => {
   res.json({ test: true });
 });
 
-console.log("HOLA MUNDO");
-
 //Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
 // lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
-app.use(express.static(path.resolve(__dirname, "../dist")));
+app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
 app.get("*", (req, res) => {
   const ruta = path.resolve(__dirname, "../fe-src/index.html");
