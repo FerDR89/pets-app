@@ -1,0 +1,29 @@
+{
+  "name": "desafiom7",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@vaadin/router": "^1.7.4",
+    "algoliasearch": "^4.11.0",
+    "cloudinary": "^1.27.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "dropzone": "^6.0.0-beta.2",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "parcel": "^2.0.1",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.12.0-alpha.1",
+    "typescript": "^4.5.4"
+  },
+  "scripts": {
+    "dev:be": "nodemon --watch ./be-src/index.ts --ext ts --exec ts-node ./be-src/index.ts",
+    "dev:fe": "parcel ./fe-src/index.html",
+    "build:be": "tsc",
+    "build:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist",
+    "build": "npm run build:be && npm run build:fe",
+    "start": "node ./be-dist/index.js"
+  }
+}

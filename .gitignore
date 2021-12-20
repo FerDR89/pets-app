@@ -1,0 +1,5 @@
+node_modules
+dist
+be-dist
+fe-dist
+.env

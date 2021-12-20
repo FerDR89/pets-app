@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "module": "CommonJS",
+        "outDir": "be-dist"
+    },
+    "include": ["./be-src/**/*.ts"]
+}
