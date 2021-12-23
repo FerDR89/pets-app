@@ -21,6 +21,8 @@ app.get("/test", (req, res) => {
 // lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
 app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
+// app.use(express.static(path.resolve(__dirname, "../dist")));
+
 app.get("*", (req, res) => {
   const ruta = path.resolve(__dirname, "../fe-src/index.html");
   res.sendFile(ruta);

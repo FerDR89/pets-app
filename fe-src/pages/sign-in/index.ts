@@ -1,6 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
-class signInPage extends HTMLElement {
+class SignInPage extends HTMLElement {
   shadow: ShadowRoot;
   constructor() {
     super();
@@ -82,4 +82,4 @@ class signInPage extends HTMLElement {
   //   this.listeners();
   // }
 }
-window.customElements.define("x-sign-in-page", signInPage);
+window.customElements.define("x-sign-in-page", SignInPage);

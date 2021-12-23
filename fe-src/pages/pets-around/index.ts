@@ -1,6 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
-class petsAroundPage extends HTMLElement {
+class PetsAroundPage extends HTMLElement {
   shadow: ShadowRoot;
   constructor() {
     super();
@@ -82,4 +82,4 @@ class petsAroundPage extends HTMLElement {
   //   this.listeners();
   // }
 }
-window.customElements.define("x-pets-around-page", petsAroundPage);
+window.customElements.define("x-pets-around-page", PetsAroundPage);
