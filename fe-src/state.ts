@@ -2,8 +2,25 @@ const API_URL = process.env.API_BASE_URL || "http://localhost:3000";
 
 const state = {
   data: {
-    userName: "",
-    userId: "",
+    user: { userName: "", userEmail: "", userId: "", userToken: "" },
+    guess: {
+      guessLoc: {
+        lng: "",
+        lat: "",
+      },
+      guessName: "",
+      guessPhone: "",
+      guessReportPet: "",
+    },
+    pet: {
+      petName: "",
+      petImgURL: "",
+      petLoc: {
+        lng: "",
+        lat: "",
+      },
+      found_it: "",
+    },
   },
   listeners: [],
 
@@ -25,6 +42,13 @@ const state = {
   //   cs.userName = name;
   //   this.setState(cs);
   // },
+
+  setGuessLoc(lng: number, lat: number) {
+    const cs = this.getState();
+    cs.guessLoc.lng = lng;
+    cs.guessLoc.lat = lat;
+    this.setState(cs);
+  },
 
   subscribe(callback) {
     this.listeners.push(callback);

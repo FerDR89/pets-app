@@ -41,13 +41,12 @@ class CustomText extends HTMLElement {
       .title{
         font-size:${this.fontSize};
         font-weight:700;
-        line-height: 85px;
-        text-align:center;
+        line-height: 60px;
     }
       .text-bold{
         font-size:${this.fontSize};
         font-weight:600;
-        line-height: 45px;
+        line-height: 24px;
     }
       .body{
         font-size:${this.fontSize};

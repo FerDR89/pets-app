@@ -3,7 +3,7 @@ import * as path from "path";
 import * as cors from "cors";
 import { cloudinary } from "./lib/cloudinary";
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
-require("dotenv").config();
+import { User, Pet, Auth } from "./models/models";
 
 const app = express();
 const port = process.env.PORT || 3000;

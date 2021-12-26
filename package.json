@@ -22,6 +22,7 @@
   "scripts": {
     "dev:be": "nodemon --watch ./be-src/index.ts --ext ts --exec ts-node ./be-src/index.ts",
     "dev:fe": "parcel ./fe-src/index.html",
+    "sync": "ts-node ./be-src/sync.ts",
     "build:be": "tsc",
     "build:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist",
     "build": "npm run build:be && npm run build:fe",

@@ -62,6 +62,7 @@ class CustomHeader extends HTMLElement {
         justify-content:space-between;
         background-color: var(--header-bgc);
       }
+
       .header__img-container{
         width:40px;
         height:35px;
@@ -134,12 +135,12 @@ class CustomHeader extends HTMLElement {
         background-color:blue;
         position:absolute;
         top:60px;
-        right:-400px; 
-        transition: right 1s ease-in-out ;      
+        left:-400px; 
+        transition: left 1s ease-in-out ;    
       }
       
       .header__menu-container.show{     
-        right:0px;  
+        left:0px;  
       }
 
       .header__menu-list{
@@ -183,6 +184,7 @@ class CustomHeader extends HTMLElement {
         font-weight:400;
         color: var(--font-colorWht)
       }
+      
       .header__close-sesion{
         text-transform:uppercase;
         color: var(--font-link)

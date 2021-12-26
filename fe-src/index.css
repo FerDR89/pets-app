@@ -19,10 +19,10 @@ body {
   margin: 0;
   font-family: var(--font-family);
   background-color: var(--bgc);
-  color: lightgray;
+  color: var(--font-colorBlk);
 }
 
 .root {
   max-width: 375px;
-  min-height: 100vh;
+  height: 100vh;
 }
