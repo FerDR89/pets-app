@@ -1,14 +1,18 @@
 import * as express from "express";
 import * as path from "path";
 import * as cors from "cors";
+import * as jwt from "jsonwebtoken";
+require("dotenv").config();
+const SECRET = process.env.SECRET_KEY;
 import { cloudinary } from "./lib/cloudinary";
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
-import { createUser } from "./controllers/user-controller";
+import { createUser, updateUser } from "./controllers/user-controller";
 import {
   getUserId,
   createAuthUser,
   authUser,
 } from "./controllers/auth-controller";
+import { createPet } from "./controllers/pet-controller";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,9 +27,7 @@ app.post("/signin", async (req, res) => {
     res.status(400).json({ message: "Please insert a valid email" });
   } else {
     try {
-      console.log("email on sigin", req.body.email);
       const user_id = await getUserId(req.body.email);
-      console.log("User on sigin", user_id);
       user_id === 0
         ? res.json({ message: "user not found" })
         : res.json({ user_id });
@@ -43,19 +45,13 @@ app.post("/auth", async (req, res) => {
     res.status(400).json({ message: "Please insert an email" });
   } else {
     try {
-      if (req.body.password === req.body.repeatPassword) {
-        const newUserId = await createUser(req.body);
-        const newUserAuth = await createAuthUser(req.body, newUserId);
-        newUserAuth == true
-          ? res.json({ newUserId })
-          : res.status(500).json({
-              message: "Server error",
-            });
-      } else {
-        res.status(400).json({
-          message: "Please check your passwords. They are not the same",
-        });
-      }
+      const newUserId = await createUser(req.body);
+      const newUserAuth = await createAuthUser(req.body, newUserId);
+      newUserAuth == true
+        ? res.json({ newUserId })
+        : res.status(500).json({
+            message: "Server error",
+          });
     } catch (error) {
       console.error(error);
     }
@@ -72,6 +68,42 @@ app.post("/auth/token", async (req, res) => {
       auth == false
         ? res.status(400).json({ message: "Invalid password" })
         : res.json({ token: auth });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+function authMiddleware(req, res, next) {
+  /*req.header es donde me llegan los header en un request.
+  Este objeto tendrá como propieda "Authorization" que dentro tiene como valor la palabra "bearer" y a continuación
+  el token que enviamos a traves del header.
+  Mediante el método split(" ") dividimos el string en un array indicandole a traves de un espacio entre las comillas que cada vez que encuentre un espacio vacio me genere una nueva posición del array quedandome así un array con dos posiciones. La primera la palabra bearer y luego el token*/
+  const token = req.headers.authorization.split(" ")[1];
+
+  try {
+    const data = jwt.verify(token, SECRET);
+    req._userData = data;
+    next();
+  } catch {
+    res.status(401).json({ message: "your token is not correct" });
+  }
+}
+
+app.post("/post-pet", authMiddleware, async (req, res) => {
+  const { user_id } = req._userData;
+  if (!req.body && !user_id) {
+    res.status(401).json({ message: "your information is not complete" });
+  } else {
+    try {
+      const pet_id = await createPet(req.body, user_id);
+      const existUser = await updateUser(user_id, pet_id);
+      if (pet_id && existUser === true) {
+        res.json({
+          newPet: true,
+          updateUser: true,
+        });
+      }
     } catch (error) {
       console.error(error);
     }

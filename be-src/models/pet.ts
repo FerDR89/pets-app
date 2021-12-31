@@ -6,10 +6,9 @@ export class Pet extends Model {}
 Pet.init(
   {
     fullname: DataTypes.STRING,
-    imgURUL: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
-    lat: DataTypes.FLOAT,
-    lng: DataTypes.FLOAT,
+    imgURL: DataTypes.STRING,
+    lost_geo_lat: DataTypes.FLOAT,
+    lost_geo_lng: DataTypes.FLOAT,
     found_it: DataTypes.BOOLEAN,
   },
   { sequelize, modelName: "pet" }

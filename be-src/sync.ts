@@ -5,7 +5,7 @@ import { User } from "./models/models";
 Importar un modelo y a travez de ese modelo mediante la prop sequelize realizar la sync*/
 
 User.sequelize
-  .sync({ force: true })
+  .sync({ alter: true })
   .then((res) => {
     console.log(res);
   })
