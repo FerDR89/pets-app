@@ -47,4 +47,13 @@ async function authUser(dataUser) {
   }
 }
 
-export { createAuthUser, getUserId, authUser };
+async function updateAuthUser(user_id: number, password?) {
+  const existAuthUser = await Auth.findByPk(user_id);
+  const passHash = getHash(password);
+  await existAuthUser.update({
+    password: passHash,
+  });
+  return true;
+}
+
+export { createAuthUser, getUserId, authUser, updateAuthUser };

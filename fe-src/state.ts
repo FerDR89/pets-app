@@ -3,7 +3,13 @@ const API_URL = process.env.API_BASE_URL || "http://localhost:3000";
 
 const state = {
   data: {
-    user: { userName: "", userEmail: "", userId: "", userToken: "" },
+    user: {
+      userName: "",
+      userEmail: "",
+      userId: "",
+      userToken: "",
+      pets_id: [],
+    },
     guess: {
       guessLoc: {
         lng: "",

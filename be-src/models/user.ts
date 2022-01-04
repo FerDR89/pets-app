@@ -7,7 +7,7 @@ User.init(
   {
     email: DataTypes.STRING,
     fullname: DataTypes.STRING,
-    pet_id: DataTypes.INTEGER,
+    pet_id: DataTypes.ARRAY(DataTypes.INTEGER),
   },
   { sequelize, modelName: "user" }
 );

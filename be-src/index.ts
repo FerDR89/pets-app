@@ -7,12 +7,9 @@ const SECRET = process.env.SECRET_KEY;
 import { cloudinary } from "./lib/cloudinary";
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
 import { createUser, updateUser } from "./controllers/user-controller";
-import {
-  getUserId,
-  createAuthUser,
-  authUser,
-} from "./controllers/auth-controller";
+import * as authFunc from "./controllers/auth-controller";
 import { createPet } from "./controllers/pet-controller";
+import { Auth, User, Pet, Report } from "./models/models";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -27,7 +24,7 @@ app.post("/signin", async (req, res) => {
     res.status(400).json({ message: "Please insert a valid email" });
   } else {
     try {
-      const user_id = await getUserId(req.body.email);
+      const user_id = await authFunc.getUserId(req.body.email);
       user_id === 0
         ? res.json({ message: "user not found" })
         : res.json({ user_id });
@@ -46,7 +43,7 @@ app.post("/auth", async (req, res) => {
   } else {
     try {
       const newUserId = await createUser(req.body);
-      const newUserAuth = await createAuthUser(req.body, newUserId);
+      const newUserAuth = await authFunc.createAuthUser(req.body, newUserId);
       newUserAuth == true
         ? res.json({ newUserId })
         : res.status(500).json({
@@ -64,7 +61,7 @@ app.post("/auth/token", async (req, res) => {
     res.status(400).json({ message: "Please insert your password" });
   } else {
     try {
-      const auth = await authUser(req.body);
+      const auth = await authFunc.authUser(req.body);
       auth == false
         ? res.status(400).json({ message: "Invalid password" })
         : res.json({ token: auth });
@@ -90,6 +87,32 @@ function authMiddleware(req, res, next) {
   }
 }
 
+/*Cuando envio los datos desde el front, lo tengo que hacer junto al header authorization y el token */
+app.patch("/my-profile", authMiddleware, async (req, res) => {
+  const { user_id } = req._userData;
+  const { fullname, password } = req.body;
+
+  if (!fullname && !password && !user_id) {
+    res.status(401).json({ message: "your information is not complete" });
+  } else {
+    try {
+      console.log(fullname);
+      let updatedData = { fullname };
+      const existUser = await updateUser(user_id, updatedData);
+      const existAuthUser = await authFunc.updateAuthUser(user_id, password);
+      if (existUser === true && existAuthUser === true) {
+        res.json({
+          updateUser: true,
+          updateAuthUser: true,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+/*Cuando envio los datos desde el front, lo tengo que hacer junto al header authorization y el token */
 app.post("/post-pet", authMiddleware, async (req, res) => {
   const { user_id } = req._userData;
   if (!req.body && !user_id) {
@@ -97,7 +120,8 @@ app.post("/post-pet", authMiddleware, async (req, res) => {
   } else {
     try {
       const pet_id = await createPet(req.body, user_id);
-      const existUser = await updateUser(user_id, pet_id);
+      let updatedData = { pet_id };
+      const existUser = await updateUser(user_id, updatedData);
       if (pet_id && existUser === true) {
         res.json({
           newPet: true,
@@ -112,9 +136,26 @@ app.post("/post-pet", authMiddleware, async (req, res) => {
 
 //Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
 // lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
-app.use(express.static(path.resolve(__dirname, "../fe-dist")));
+// app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
-// app.use(express.static(path.resolve(__dirname, "../dist")));
+app.get("/test-user", async (req, res) => {
+  const user = await User.findAll();
+  res.json({ user });
+});
+app.get("/test-auth", async (req, res) => {
+  const auth = await Auth.findAll();
+  res.json({ auth });
+});
+app.get("/test-pet", async (req, res) => {
+  const pet = await Pet.findAll();
+  res.json({ pet });
+});
+app.get("/test-report", async (req, res) => {
+  const report = await Report.findAll();
+  res.json({ report });
+});
+
+app.use(express.static(path.resolve(__dirname, "../dist")));
 
 app.get("*", (req, res) => {
   const ruta = path.resolve(__dirname, "../fe-src/index.html");
