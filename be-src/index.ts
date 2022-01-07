@@ -4,11 +4,10 @@ import * as cors from "cors";
 import * as jwt from "jsonwebtoken";
 require("dotenv").config();
 const SECRET = process.env.SECRET_KEY;
-import { cloudinary } from "./lib/cloudinary";
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
 import { createUser, updateUser } from "./controllers/user-controller";
 import * as authFunc from "./controllers/auth-controller";
-import { createPet } from "./controllers/pet-controller";
+import * as petFunc from "./controllers/pet-controller";
 import { Auth, User, Pet, Report } from "./models/models";
 
 const app = express();
@@ -91,12 +90,10 @@ function authMiddleware(req, res, next) {
 app.patch("/my-profile", authMiddleware, async (req, res) => {
   const { user_id } = req._userData;
   const { fullname, password } = req.body;
-
   if (!fullname && !password && !user_id) {
     res.status(401).json({ message: "your information is not complete" });
   } else {
     try {
-      console.log(fullname);
       let updatedData = { fullname };
       const existUser = await updateUser(user_id, updatedData);
       const existAuthUser = await authFunc.updateAuthUser(user_id, password);
@@ -104,6 +101,10 @@ app.patch("/my-profile", authMiddleware, async (req, res) => {
         res.json({
           updateUser: true,
           updateAuthUser: true,
+        });
+      } else {
+        res.status(501).json({
+          message: "error server",
         });
       }
     } catch (error) {
@@ -119,13 +120,17 @@ app.post("/post-pet", authMiddleware, async (req, res) => {
     res.status(401).json({ message: "your information is not complete" });
   } else {
     try {
-      const pet_id = await createPet(req.body, user_id);
+      const pet_id = await petFunc.createPet(req.body, user_id);
       let updatedData = { pet_id };
       const existUser = await updateUser(user_id, updatedData);
       if (pet_id && existUser === true) {
         res.json({
           newPet: true,
           updateUser: true,
+        });
+      } else {
+        res.status(501).json({
+          message: "error server",
         });
       }
     } catch (error) {
@@ -134,9 +139,100 @@ app.post("/post-pet", authMiddleware, async (req, res) => {
   }
 });
 
-//Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
-// lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
-// app.use(express.static(path.resolve(__dirname, "../fe-dist")));
+app.get("/get-my-pets", authMiddleware, async (req, res) => {
+  const { user_id } = req._userData;
+  if (!req.body) {
+    res.status(401).json({ message: "your information is not complete" });
+  } else {
+    try {
+      const userPets = await petFunc.getMyPets(user_id);
+      res.send(userPets);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+function checkDataPet(body) {
+  const respuesta: any = {};
+  if (body.fullname) {
+    respuesta.fullname = body.fullname;
+  }
+  if (body.imgURL) {
+    respuesta.imgURL = body.imgURL;
+  }
+  if (body.lost_geo_lat) {
+    respuesta.lost_geo_lat = body.lost_geo_lat;
+  }
+  if (body.lost_geo_lng) {
+    respuesta.lost_geo_lng = body.lost_geo_lng;
+  }
+  if (body.found_it) {
+    respuesta.found_it = body.found_it;
+  }
+  return respuesta;
+}
+
+/*Desde el front cuando hago click en editar la mascota, de alguna manera tengo que conseguir su id y pasarlo en el body*/
+app.patch("/update-pet", authMiddleware, async (req, res) => {
+  if (!req.body) {
+    res.status(401).json({ message: "your information is not complete" });
+  } else {
+    const { pet_id } = req.body;
+    const dataPet = await checkDataPet(req.body);
+    try {
+      const updatedPet = await petFunc.updatePet(dataPet, pet_id);
+      if (updatedPet === true) {
+        res.json({
+          updatePet: true,
+        });
+      } else {
+        res.status(501).json({
+          message: "error server",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+/*Desde el front cuando hago click en editar la mascota, de alguna manera tengo que conseguir su id y pasarlo en el body*/
+app.delete("/delete-pet", authMiddleware, async (req, res) => {
+  if (!req.body) {
+    res.status(401).json({ message: "your information is not complete" });
+  } else {
+    const { pet_id } = req.body;
+    try {
+      const deletedPet = await petFunc.deletePet(pet_id);
+      if (deletedPet) {
+        res.json({
+          deletedPet: true,
+        });
+      } else {
+        res.status(501).json({
+          message: "error server",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+// app.post("/report-pet", authMiddleware, async (req, res) => {
+//   const { user_id } = req._userData;
+//   console.log("dale bb", user_id);
+
+//   if (!req.body) {
+//     res.status(401).json({ message: "your information is not complete" });
+//   } else {
+//     try {
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
+// });
 
 app.get("/test-user", async (req, res) => {
   const user = await User.findAll();
@@ -154,6 +250,10 @@ app.get("/test-report", async (req, res) => {
   const report = await Report.findAll();
   res.json({ report });
 });
+
+//Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
+// lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
+// app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
 app.use(express.static(path.resolve(__dirname, "../dist")));
 

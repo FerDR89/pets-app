@@ -1,5 +1,5 @@
 // const cloudinary = require('cloudinary').v2;
-import { v2 as cloudinary, v2 } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 require("dotenv").config();
 
 cloudinary.config({
@@ -8,4 +8,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export { cloudinary };
+const cloudinaryOptions = {
+  resource_type: "image",
+  discard_original_filename: true,
+  width: 330,
+  height: 150,
+};
+
+export { cloudinary, cloudinaryOptions };
