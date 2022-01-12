@@ -1,14 +1,14 @@
 :root {
   --font-colorBlk: #000;
   --font-colorWht: #f7ebeb;
-  --font-link: #8af1ff;
-  --btn-bg1: #ff9df5;
+  --font-link-color: #668d0a;
+  --btn-bg1: lightcoral;
   --btn-bg2: #97ea9f;
   --btn-bg3: #cdcdcd;
-  --header-bgc: #ff6868;
+  --header-bgc: #8fc7c7;
   --menu-bgc: #8af1ff;
   --font-family: "Poppins", sans-serif;
-  --bgc: #e5e5e5;
+  --bgc: #f6d7a7;
 }
 
 * {
@@ -24,5 +24,5 @@ body {
 
 .root {
   max-width: 375px;
-  height: 100vh;
+  min-height: 100vh;
 }

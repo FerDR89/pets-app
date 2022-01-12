@@ -1,4 +1,12 @@
 import "./router";
 import "./components/header";
 import "./components/text";
+import "./components/card";
+import "./pages/edit-pets";
+import "./pages/me";
+import "./pages/my-pets";
+import "./pages/pets-around";
+import "./pages/report-pets";
+import "./pages/sign-in";
+import "./pages/sign-up";
 import "./pages/welcome";

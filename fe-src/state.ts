@@ -18,7 +18,21 @@ const state = {
       guessName: "",
       guessPhone: "",
       guessReportPet: "",
+      guessReportPetId: "",
     },
+    //Array con la info de todas las pets cercanas para mostrar al invitado
+    petsAround: [
+      // {
+      //   petName: "",
+      //   petImgURL: "",
+      //   petLoc: {
+      //     lng: "",
+      //     lat: "",
+      //   },
+      //   found_it: "",
+      // },
+    ],
+    //Objeto con la info de 1 mascota
     pet: {
       petName: "",
       petImgURL: "",
@@ -52,8 +66,8 @@ const state = {
 
   setGuessLoc(lng: number, lat: number) {
     const cs = this.getState();
-    cs.guessLoc.lng = lng;
-    cs.guessLoc.lat = lat;
+    cs.guess.guessLoc.lng = lng;
+    cs.guess.guessLoc.lat = lat;
     this.setState(cs);
   },
 

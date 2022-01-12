@@ -48,12 +48,9 @@ class WelcomePage extends HTMLElement {
       <div class="welcome__container-text">
           <custom-text tag="h3" size="16px">Para ver las mascotas reportadas cerca tuyo necesitamos permiso para conocer tu ubicación.</custom-text>
        </div>
-
       <div class="welcome__container-btn">
           <button class="welcome__btn">Dar mi ubicación </button>
       </div>
-   
-  
   </div>
     `;
     const style = document.createElement("style");
@@ -95,6 +92,7 @@ class WelcomePage extends HTMLElement {
         min-width:100%;
         min-height:100%;
         background-color: var(--btn-bg1);
+        color: var(--font-colorWht);
         border:none;
         border-radius:2px;
         font-size:16px;

@@ -1,4 +1,4 @@
-const paw = require("../../assets/paw.svg");
+const icon = require("../../assets/pet-icon.png");
 
 class CustomHeader extends HTMLElement {
   shadow: ShadowRoot;
@@ -25,7 +25,7 @@ class CustomHeader extends HTMLElement {
     headerEl.innerHTML = `
       <div class="header__img-container">
         <a href="/welcome">
-          <img src="${paw}" alt="paw image" class="header__img" />
+          <img src="${icon}" alt="paw image" class="header__img" />
         </a>
       </div>
       <nav class="header__menu-nav">
@@ -67,7 +67,7 @@ class CustomHeader extends HTMLElement {
         width:40px;
         height:35px;
       }
-     
+    
       .header__img{
         width:100%;
         height:100%;
@@ -110,7 +110,7 @@ class CustomHeader extends HTMLElement {
       }
       
       .header__menu-burguer.active {
-        background-color:#ff2234;
+        background-color:var(--bgc);
         transition: all 0.5s ease-out ;      
       }
       
@@ -132,7 +132,7 @@ class CustomHeader extends HTMLElement {
         flex-direction:column;
         align-items:center;
         justify-content:space-evenly;
-        background-color:blue;
+        background-color:var(--header-bgc);
         position:absolute;
         top:60px;
         left:-400px; 
@@ -166,7 +166,7 @@ class CustomHeader extends HTMLElement {
         text-decoration:none;
         font-size:24px;
         font-weight:700;
-        color: var(--font-colorWht)
+        color: var(--font-colorBlk)
       }
 
       .header__sesion-container{
@@ -182,12 +182,12 @@ class CustomHeader extends HTMLElement {
         margin:0px;
         font-size:24px;
         font-weight:400;
-        color: var(--font-colorWht)
+        color: var(--font-colorBlk)
       }
       
       .header__close-sesion{
         text-transform:uppercase;
-        color: var(--font-link)
+        color: var(--font-link-color)
       }
       `;
     this.shadow.appendChild(style);
