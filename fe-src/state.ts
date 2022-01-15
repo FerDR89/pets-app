@@ -8,7 +8,7 @@ const state = {
       userEmail: "",
       userId: "",
       userToken: "",
-      pets_id: [],
+      pets: [],
     },
     guess: {
       guessLoc: {
@@ -19,19 +19,20 @@ const state = {
       guessPhone: "",
       guessReportPet: "",
       guessReportPetId: "",
+      //Array con la info de todas las pets cercanas para mostrar al invitado
+      petsAround: [
+        // {
+        //   petName: "",
+        //   petImgURL: "",
+        //   petLoc: {
+        //     lng: "",
+        //     lat: "",
+        //   },
+        //   found_it: "",
+        // },
+      ],
     },
-    //Array con la info de todas las pets cercanas para mostrar al invitado
-    petsAround: [
-      // {
-      //   petName: "",
-      //   petImgURL: "",
-      //   petLoc: {
-      //     lng: "",
-      //     lat: "",
-      //   },
-      //   found_it: "",
-      // },
-    ],
+
     //Objeto con la info de 1 mascota
     pet: {
       petName: "",
@@ -68,6 +69,21 @@ const state = {
     const cs = this.getState();
     cs.guess.guessLoc.lng = lng;
     cs.guess.guessLoc.lat = lat;
+    this.setState(cs);
+  },
+
+  setGuessReportPetId(pet_id: number) {
+    const cs = this.getState();
+    cs.guess.guessReportPetId = pet_id;
+    this.setState(cs);
+  },
+
+  setGuessData(dataGuess: object) {
+    const cs = this.getState();
+    cs.guess = {
+      ...cs.guess,
+      ...dataGuess,
+    };
     this.setState(cs);
   },
 

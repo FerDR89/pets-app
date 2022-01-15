@@ -1,7 +1,7 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
 const perruna = require("../../assets/perruna.jpg");
-const petPrueba = require("../../assets/pet-icon.png");
+
 class PetsAroundPage extends HTMLElement {
   shadow: ShadowRoot;
   constructor() {
@@ -14,24 +14,39 @@ class PetsAroundPage extends HTMLElement {
 
   listeners() {
     const cardsEl = this.shadow.querySelectorAll("custom-card");
+    const backgroundEl = this.shadow.querySelector(".pets-around__container");
+    const modalEl = this.shadow.querySelector(".modal__container-modal");
+
     for (const card of cardsEl) {
-      const backgroundEl = this.shadow.querySelector(".pets-around__container");
-      const modalEl = this.shadow.querySelector(".modal__container-modal");
       card.addEventListener("report", (e) => {
         const event = e as any;
         const guessReportPetId = event.detail.petId;
+        state.setGuessReportPetId(guessReportPetId);
         backgroundEl.classList.toggle("pets-around__modal-active");
         modalEl.classList.toggle("modal__active");
-        console.log("Click", guessReportPetId);
       });
     }
 
     const closeModalEl = this.shadow.querySelector(".modal__container-exit");
-    const modalEl = this.shadow.querySelector(".modal__container-modal");
-    const backgroundEl = this.shadow.querySelector(".pets-around__container");
     closeModalEl.addEventListener("click", () => {
       modalEl.classList.toggle("modal__active");
       backgroundEl.classList.toggle("pets-around__modal-active");
+    });
+
+    const formModalEl = modalEl.querySelector(".modal__form");
+    formModalEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const target = e.target as any;
+      const dataGuess = {
+        guessName: target.name.value,
+        guessPhone: target.phone.value,
+        guessReportPet: target.report.value,
+      };
+      state.setGuessData(dataGuess);
+
+      target.name.value = "";
+      target.phone.value = "";
+      target.report.value = "";
     });
   }
 
@@ -51,53 +66,52 @@ class PetsAroundPage extends HTMLElement {
         <custom-card petId="4" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
         <custom-card petId="5" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
       </div>
-  </div>
+    </div>
 
   <div class="modal__container-modal">
-  <div class="modal__container-exit">
-    <div class="modal__exit-line1"></div>
-    <div class="modal__exit-line2"></div>
-  </div>
-  <div class="modal__container-title">
+      <div class="modal__container-exit">
+      <div class="modal__exit-line1"></div>
+      <div class="modal__exit-line2"></div>
+      </div>
+    <div class="modal__container-title">
       <custom-text tag="h1" size="40px">Reportar info de Pickachu</custom-text>
-  </div>
-  <form class="modal__form">
-    <fieldset class="modal__fieldset">
-      <label class="modal__label-name" for="name">TU NOMBRE</label>
-      <input
-        class="modal__input-name"
-        id="name"
-        name="name"
-        type="text"
-        required
-      />
-    </fieldset>
+    </div>
+    <form class="modal__form">
+      <fieldset class="modal__fieldset">
+        <label class="modal__label-name" for="name">TU NOMBRE</label>
+          <input
+            class="modal__input-name"
+            id="name"
+            name="name"
+            type="text"
+            required
+          />
+      </fieldset>
 
-    <fieldset class="modal__fieldset">
-      <label class="modal__label-phone" for="phone">TU TELÉFONO</label>
-      <input
-        class="modal__input-phone"
-        id="phone"
-        name="phone"
-        type="tel"
-        required
-      />
-    </fieldset>
+      <fieldset class="modal__fieldset">
+        <label class="modal__label-phone" for="phone">TU TELÉFONO</label>
+          <input
+            class="modal__input-phone"
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+          />
+      </fieldset>
 
-    <fieldset class="modal__fieldset-area">
-      <label class="modal__label-report" for="report"
-        >¿DÓNDE LO VISTE?</label>
-      <textarea
-        name="report"
-        id="report"
+      <fieldset class="modal__fieldset-area">
+        <label class="modal__label-report" for="report">¿DÓNDE LO VISTE?</label>
+          <textarea
+          name="report"
+          id="report"
         class="modal__text-report"></textarea>
     </fieldset>
 
-<div class="modal__container-btn">
-  <button class="modal__form-btn">Enviar</button>
-</div>
-  </form>
-</div>
+    <div class="modal__container-btn">
+      <button class="modal__form-btn">Enviar</button>
+    </div>
+    </form>
+  </div>
     `;
 
     const style = document.createElement("style");
@@ -269,4 +283,4 @@ class PetsAroundPage extends HTMLElement {
     this.listeners();
   }
 }
-window.customElements.define("x-pets-around-page", PetsAroundPage);
+customElements.define("x-pets-around-page", PetsAroundPage);
