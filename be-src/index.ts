@@ -5,7 +5,12 @@ import * as jwt from "jsonwebtoken";
 require("dotenv").config();
 const SECRET = process.env.SECRET_KEY;
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
-import { createUser, updateUser } from "./controllers/user-controller";
+import {
+  createUser,
+  searchUser,
+  updateUser,
+} from "./controllers/user-controller";
+import { reportPet } from "./controllers/report-controller";
 import * as authFunc from "./controllers/auth-controller";
 import * as petFunc from "./controllers/pet-controller";
 import { Auth, User, Pet, Report } from "./models/models";
@@ -220,19 +225,28 @@ app.delete("/delete-pet", authMiddleware, async (req, res) => {
   }
 });
 
-// app.post("/report-pet", authMiddleware, async (req, res) => {
-//   const { user_id } = req._userData;
-//   console.log("dale bb", user_id);
-
-//   if (!req.body) {
-//     res.status(401).json({ message: "your information is not complete" });
-//   } else {
-//     try {
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
-// });
+app.post("/report-pet", async (req, res) => {
+  const { pet_id } = req.body;
+  if (!req.body) {
+    res.status(401).json({ message: "your information is not complete" });
+  } else {
+    try {
+      const report = await reportPet(req.body, pet_id);
+      if (report == true) {
+        const user_id = await petFunc.searchPet(pet_id);
+        const userEmail = await searchUser(user_id);
+        //AGREGAR ACA TODO LO DE SIGRID
+        res.json({ userEmail });
+      } else {
+        res.status(501).json({
+          message: "error server",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
 
 app.get("/test-user", async (req, res) => {
   const user = await User.findAll();

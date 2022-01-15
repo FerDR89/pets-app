@@ -37,4 +37,10 @@ async function updateUser(user_id, updatedData) {
   return true;
 }
 
-export { createUser, updateUser };
+async function searchUser(user_id) {
+  const foundUser = await User.findByPk(user_id);
+  const userEmail = foundUser.get("email");
+  return userEmail;
+}
+
+export { createUser, updateUser, searchUser };

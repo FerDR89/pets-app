@@ -1,5 +1,6 @@
 require("dotenv").config();
-const API_URL = process.env.API_BASE_URL || "http://localhost:3000";
+// const API_URL = process.env.API_BASE_URL || "http://localhost:3000";
+const API_URL = "http://localhost:3000";
 
 const state = {
   data: {
@@ -85,6 +86,24 @@ const state = {
       ...dataGuess,
     };
     this.setState(cs);
+  },
+
+  sendReport() {
+    const cs = this.getState();
+    const dataUser = {
+      guessName: cs.guess.guessName,
+      guessPhone: cs.guess.guessPhone,
+      guessReportPet: cs.guess.guessReportPet,
+      pet_id: cs.guess.guessReportPetId,
+    };
+    console.log(dataUser);
+    fetch(API_URL + "/report-pet", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataUser),
+    });
   },
 
   subscribe(callback) {

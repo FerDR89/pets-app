@@ -83,4 +83,10 @@ async function deletePet(pet_id: number) {
   return deletePet;
 }
 
-export { createPet, getMyPets, updatePet, deletePet };
+async function searchPet(pet_id: number) {
+  const foundPet = await Pet.findByPk(pet_id);
+  const user_id = foundPet.get("userId");
+  return user_id;
+}
+
+export { createPet, getMyPets, updatePet, deletePet, searchPet };

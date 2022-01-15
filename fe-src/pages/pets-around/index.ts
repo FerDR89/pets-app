@@ -43,6 +43,13 @@ class PetsAroundPage extends HTMLElement {
         guessReportPet: target.report.value,
       };
       state.setGuessData(dataGuess);
+      state.sendReport();
+
+      //PENSAR SI PONER UN TIMER EN EL MODAL QUE MUESTRE UN CARTEL DE AGRADECIMIENTO Y SE CIERRE
+      //VER COMO HACER PARA NO PISAR EL MODAL POR SI QUIERE REPORTAR MÁS DE UNA MASCOTA
+      // const timer = window.setTimeout(() => {
+      //   window.clearTimeout(timer);
+      // }, 3000);
 
       target.name.value = "";
       target.phone.value = "";
@@ -73,9 +80,14 @@ class PetsAroundPage extends HTMLElement {
       <div class="modal__exit-line1"></div>
       <div class="modal__exit-line2"></div>
       </div>
-    <div class="modal__container-title">
-      <custom-text tag="h1" size="40px">Reportar info de Pickachu</custom-text>
-    </div>
+      <div class="modal__container-title">
+        <custom-text tag="h1" size="40px">Reportar info de Pickachu</custom-text>
+      </div>
+    // <div class="modal__container-title , modal__container-report-message">
+    //   <custom-text tag="h1" size="24px">Su reporte ha sido exitoso, nos pondremos en contacto con su dueño.</custom-text>
+    //   <custom-text tag="h1" size="24px">
+    //   Muchas gracias por colaborar con nuestra causa!!!</custom-text>
+    // </div>
     <form class="modal__form">
       <fieldset class="modal__fieldset">
         <label class="modal__label-name" for="name">TU NOMBRE</label>
@@ -211,6 +223,10 @@ class PetsAroundPage extends HTMLElement {
       padding:0;
       margin-top:30px;
       text-shadow: 3px 5px 1px lightcoral;
+    }
+    
+    .modal__container-report-message{
+      display:none;
     }
 
     .modal__form {

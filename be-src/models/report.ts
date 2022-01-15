@@ -8,7 +8,6 @@ Report.init(
     fullname: DataTypes.STRING,
     phone: DataTypes.INTEGER,
     report: DataTypes.STRING,
-    pet_id: DataTypes.INTEGER,
   },
   { sequelize, modelName: "report" }
 );
