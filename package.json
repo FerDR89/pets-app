@@ -4,6 +4,7 @@
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "@types/node": "^17.0.1",
     "@vaadin/router": "^1.7.4",
     "algoliasearch": "^4.11.0",

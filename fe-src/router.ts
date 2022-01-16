@@ -12,5 +12,5 @@ router.setRoutes([
   { path: "/pets-around", component: "x-pets-around-page" },
   { path: "/report-pets", component: "x-report-pets-page" },
   { path: "/sign-in", component: "x-sign-in-page" },
-  { path: "/sign-up", component: "x-sign-up-page" },
+  { path: "/auth", component: "x-auth-page" },
 ]);

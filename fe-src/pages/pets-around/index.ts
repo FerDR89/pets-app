@@ -44,13 +44,7 @@ class PetsAroundPage extends HTMLElement {
       };
       state.setGuessData(dataGuess);
       state.sendReport();
-
-      //PENSAR SI PONER UN TIMER EN EL MODAL QUE MUESTRE UN CARTEL DE AGRADECIMIENTO Y SE CIERRE
-      //VER COMO HACER PARA NO PISAR EL MODAL POR SI QUIERE REPORTAR MÁS DE UNA MASCOTA
-      // const timer = window.setTimeout(() => {
-      //   window.clearTimeout(timer);
-      // }, 3000);
-
+      alert("Su solicitud se ha procesado con éxito");
       target.name.value = "";
       target.phone.value = "";
       target.report.value = "";
@@ -83,11 +77,6 @@ class PetsAroundPage extends HTMLElement {
       <div class="modal__container-title">
         <custom-text tag="h1" size="40px">Reportar info de Pickachu</custom-text>
       </div>
-    // <div class="modal__container-title , modal__container-report-message">
-    //   <custom-text tag="h1" size="24px">Su reporte ha sido exitoso, nos pondremos en contacto con su dueño.</custom-text>
-    //   <custom-text tag="h1" size="24px">
-    //   Muchas gracias por colaborar con nuestra causa!!!</custom-text>
-    // </div>
     <form class="modal__form">
       <fieldset class="modal__fieldset">
         <label class="modal__label-name" for="name">TU NOMBRE</label>
@@ -96,6 +85,7 @@ class PetsAroundPage extends HTMLElement {
             id="name"
             name="name"
             type="text"
+            placeholder="Ingresa tu nombre"
             required
           />
       </fieldset>
@@ -107,6 +97,7 @@ class PetsAroundPage extends HTMLElement {
             id="phone"
             name="phone"
             type="tel"
+            placeholder="Ingresa tu telefóno"
             required
           />
       </fieldset>
@@ -116,6 +107,7 @@ class PetsAroundPage extends HTMLElement {
           <textarea
           name="report"
           id="report"
+          placeholder="Dejanos aquí tu mensaje"
         class="modal__text-report"></textarea>
     </fieldset>
 
@@ -225,10 +217,6 @@ class PetsAroundPage extends HTMLElement {
       text-shadow: 3px 5px 1px lightcoral;
     }
     
-    .modal__container-report-message{
-      display:none;
-    }
-
     .modal__form {
       width: 100%;
       height: 100%;
@@ -267,12 +255,24 @@ class PetsAroundPage extends HTMLElement {
       box-sizing: border-box;
       width:100%;
       height:50px;
+      border: none;
+      border-radius: 2px;
+      padding-left:10px;
     }
 
     .modal__text-report {
       box-sizing: border-box;
       width:100%;
       height:127px;
+      border: none;
+      border-radius: 2px;
+      padding-left:10px;
+      padding-top:5px;
+    }
+
+    .modal__input-name::placeholder, .modal__input-phone::placeholder, .modal__text-report::placeholder{
+      color:#6A097D;
+      font-size:14px;
     }
 
     .modal__container-btn {

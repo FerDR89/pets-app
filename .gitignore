@@ -4,3 +4,4 @@ dist
 be-dist
 fe-dist
 .env
+yarn.lock

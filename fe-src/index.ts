@@ -8,5 +8,5 @@ import "./pages/my-pets";
 import "./pages/pets-around";
 import "./pages/report-pets";
 import "./pages/sign-in";
-import "./pages/sign-up";
+import "./pages/auth";
 import "./pages/welcome";

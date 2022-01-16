@@ -60,6 +60,32 @@ const state = {
     console.log("State", this.data);
   },
 
+  setUserEmail(email: string) {
+    const cs = this.getState();
+    cs.user.userEmail = email;
+    this.setState(cs);
+  },
+
+  getUserId() {
+    const cs = this.getState();
+    const email = cs.user.userEmail;
+    return fetch(API_URL + "/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then((res) => res.json())
+      .then((result) => result);
+  },
+
+  setUserId(userId: number) {
+    const cs = this.getState();
+    cs.user.userId = userId;
+    this.setState(cs);
+  },
+
   // setUserName(name: string) {
   //   const cs = this.getState();
   //   cs.userName = name;
@@ -96,7 +122,6 @@ const state = {
       guessReportPet: cs.guess.guessReportPet,
       pet_id: cs.guess.guessReportPetId,
     };
-    console.log(dataUser);
     fetch(API_URL + "/report-pet", {
       method: "POST",
       headers: {
@@ -108,6 +133,7 @@ const state = {
 
   subscribe(callback) {
     this.listeners.push(callback);
+    console.log("soy el subscribe");
   },
 };
 

@@ -85,8 +85,14 @@ async function deletePet(pet_id: number) {
 
 async function searchPet(pet_id: number) {
   const foundPet = await Pet.findByPk(pet_id);
-  const user_id = foundPet.get("userId");
-  return user_id;
+  const objectPet = {
+    user_id: foundPet.get("userId"),
+    petName: foundPet.get("fullname"),
+  };
+  return objectPet;
 }
+
+//SEGUIR UNA VEZ QUE PUEDA SUBIR/MODIFICAR MASCOTAS DESDE EL FRONT
+async function searchPetsAround(lat, lng) {}
 
 export { createPet, getMyPets, updatePet, deletePet, searchPet };

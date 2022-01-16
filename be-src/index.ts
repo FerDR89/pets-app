@@ -2,6 +2,7 @@ import * as express from "express";
 import * as path from "path";
 import * as cors from "cors";
 import * as jwt from "jsonwebtoken";
+import { sgMail } from "../be-src/lib/sengrid";
 require("dotenv").config();
 const SECRET = process.env.SECRET_KEY;
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
@@ -225,6 +226,11 @@ app.delete("/delete-pet", authMiddleware, async (req, res) => {
   }
 });
 
+//SEGUIR UNA VEZ QUE PUEDA SUBIR/MODIFICAR MASCOTAS DESDE EL FRONT
+app.get("/pets-around", (req, res) => {
+  const { lat, lng } = req.query;
+});
+
 app.post("/report-pet", async (req, res) => {
   const { pet_id } = req.body;
   if (!req.body) {
@@ -233,10 +239,26 @@ app.post("/report-pet", async (req, res) => {
     try {
       const report = await reportPet(req.body, pet_id);
       if (report == true) {
-        const user_id = await petFunc.searchPet(pet_id);
-        const userEmail = await searchUser(user_id);
-        //AGREGAR ACA TODO LO DE SIGRID
-        res.json({ userEmail });
+        const { user_id, petName } = await petFunc.searchPet(pet_id);
+        const userEmail = (await searchUser(user_id)) as any;
+        //VER DE EXTRAER ESTO EN UNA FUNCIÓN
+        const msg = {
+          to: userEmail,
+          from: "ferdr89dev@gmail.com",
+          subject: `Creemos que encontramos a ${petName}, por favor ponte en contacto con quien lo vio`,
+          text: `Nombre: ${req.body.guessName},phone: ${parseInt(
+            req.body.guessPhone
+          )},report: ${req.body.guessReportPet}`,
+        };
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        res.json({ reported: true });
       } else {
         res.status(501).json({
           message: "error server",
