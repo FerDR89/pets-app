@@ -66,6 +66,8 @@ app.post("/auth/token", async (req, res) => {
     res.status(400).json({ message: "Please insert your password" });
   } else {
     try {
+      console.log(req.body);
+
       const auth = await authFunc.authUser(req.body);
       auth == false
         ? res.status(400).json({ message: "Invalid password" })

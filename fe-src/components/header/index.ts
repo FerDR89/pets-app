@@ -1,4 +1,6 @@
 const icon = require("../../assets/pet-icon.png");
+import { Router } from "@vaadin/router";
+import { state } from "../../state";
 
 class CustomHeader extends HTMLElement {
   shadow: ShadowRoot;
@@ -17,6 +19,41 @@ class CustomHeader extends HTMLElement {
       toggle.classList.toggle("active");
       menuMobile.classList.toggle("show");
     });
+
+    const meEl = this.shadow.getElementById("me");
+    const myPetsEl = this.shadow.getElementById("my-pets");
+    const reportPetsEl = this.shadow.getElementById("report-pets");
+
+    const cs = state.getState();
+    const userEmail = cs.user.userEmail;
+    const userToken = cs.user.userToken;
+
+    meEl.addEventListener("click", () => {
+      if (!userEmail && !userToken) {
+        state.setUserRoute("/me");
+        Router.go("/sign-in");
+      } else {
+        Router.go("/me");
+      }
+    });
+
+    myPetsEl.addEventListener("click", () => {
+      if (!userEmail && !userToken) {
+        state.setUserRoute("/my-pets");
+        Router.go("/sign-in");
+      } else {
+        Router.go("/my-pets");
+      }
+    });
+
+    reportPetsEl.addEventListener("click", () => {
+      if (!userEmail && !userToken) {
+        state.setUserRoute("/report-pets");
+        Router.go("/sign-in");
+      } else {
+        Router.go("/report-pets");
+      }
+    });
   }
 
   render() {
@@ -33,13 +70,13 @@ class CustomHeader extends HTMLElement {
         <div class="header__menu-container">
           <ul class="header__menu-list">
             <li class="header__menu-item">
-              <a href="/me" class="header__menu-link">Mis datos</a>
+              <a id="me" class="header__menu-link">Mis datos</a>
             </li>
             <li class="header__menu-item">
-              <a href="/my-pets" class="header__menu-link">Mis mascotas reportadas</a>
+              <a id="my-pets" class="header__menu-link , my-pets">Mis mascotas reportadas</a>
             </li>
             <li class="header__menu-item">
-              <a href="/report-pets" class="header__menu-link">Reportar mascotas</a>
+              <a id="report-pets" class="header__menu-link , report-pets">Reportar mascotas</a>
             </li>
           </ul>
           <div class="header__sesion-container">
@@ -72,7 +109,7 @@ class CustomHeader extends HTMLElement {
         width:100%;
         height:100%;
       }
-     
+
       .header__menu-nav{
       }
       
@@ -85,7 +122,7 @@ class CustomHeader extends HTMLElement {
         display:flex;
         align-items:center;
         justify-content:center;
-         transition: all 0.5s ease-out ;      
+        transition: all 0.5s ease-out ;      
       }
       
       .header__menu-burguer::before{

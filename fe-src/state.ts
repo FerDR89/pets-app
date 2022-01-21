@@ -1,6 +1,5 @@
-require("dotenv").config();
-// const API_URL = process.env.API_BASE_URL || "http://localhost:3000";
-const API_URL = "http://localhost:3000";
+const API_URL = "https://dwf-m7.herokuapp.com";
+// const API_URL = "http://localhost:3000";
 
 const state = {
   data: {
@@ -10,6 +9,7 @@ const state = {
       userId: "",
       userToken: "",
       pets: [],
+      userRoute: "",
     },
     guess: {
       guessLoc: {
@@ -80,9 +80,35 @@ const state = {
       .then((result) => result);
   },
 
+  getUserToken(password: string) {
+    const cs = this.getState();
+    const email = cs.user.userEmail;
+    return fetch(API_URL + "/auth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => res.json())
+      .then((result) => result);
+  },
+
   setUserId(userId: number) {
     const cs = this.getState();
     cs.user.userId = userId;
+    this.setState(cs);
+  },
+
+  setUserToken(userToken: string) {
+    const cs = this.getState();
+    cs.user.userToken = userToken;
+    this.setState(cs);
+  },
+
+  setUserRoute(route: string) {
+    const cs = this.getState();
+    cs.user.userRoute = route;
     this.setState(cs);
   },
 

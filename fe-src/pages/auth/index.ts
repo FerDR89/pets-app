@@ -9,7 +9,26 @@ class AuthPage extends HTMLElement {
   connectedCallback() {
     this.render();
   }
-  listeners() {}
+
+  listeners() {
+    const formEl = this.shadow.querySelector(".auth__form");
+    const cs = state.getState();
+    const userRoute = cs.user.userRoute;
+    formEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const target = e.target as any;
+      const password = target.password.value;
+      state.getUserToken(password).then((res) => {
+        if (res.token) {
+          state.setUserToken(res.token);
+          Router.go(userRoute);
+        } else {
+          alert(`${res.message}, Please try again`);
+        }
+      });
+      target.password.value = "";
+    });
+  }
 
   render() {
     const sectionEl = document.createElement("section");
@@ -22,18 +41,19 @@ class AuthPage extends HTMLElement {
     </div>
     <form class="auth__form">
       <fieldset class="auth__fieldset">
-        <label class="auth__label-email" for="email">Email</label>
+        <label class="auth__label-password" for="password">Contraseña</label>
           <input
-            class="auth__input-email"
-            id="email"
-            name="email"
-            type="text"
-            placeholder="Ingresa tu email"
+            class="auth__input-password"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Ingresa tu contraseña"
             required
           />
       </fieldset>
+      <a href="/welcome" class="auth__forget-pass">Olvidé mi contraseña</a>
       <div class="auth__container-btn">
-        <button class="auth__form-btn">Siguiente</button>
+        <button class="auth__form-btn">Ingrersar</button>
       </div>
     </form>
   </div>
@@ -59,7 +79,7 @@ class AuthPage extends HTMLElement {
 
     .auth__form {
       width: 100%;
-      height: 175px;
+      height: 200px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -76,13 +96,13 @@ class AuthPage extends HTMLElement {
       border:none;
     }
 
-    .auth__label-email {
+    .auth__label-password {
       display: block;
       font-weight: 500;
       margin-bottom:2px;
     }
 
-    .auth__input-email {
+    .auth__input-password {
       box-sizing: border-box;
       width:100%;
       height:50px;
@@ -91,9 +111,14 @@ class AuthPage extends HTMLElement {
       padding-left:10px;
     }
 
-    .auth__input-email::placeholder{
+    .auth__input-password::placeholder{
       color:#6A097D;
       font-size:14px;
+    }
+
+    .auth__forget-pass{
+      text-transform:uppercase;
+      color: var(--font-link-color)
     }
 
     .auth__container-btn {
