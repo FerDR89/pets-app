@@ -43,6 +43,7 @@ app.post("/signin", async (req, res) => {
 Guardar el email del usuario en el state para reutilizarlo en este
 Cuando mando la info desde el state, asegurarme de parsearla a un string*/
 app.post("/auth", async (req, res) => {
+  console.log("SOY EL BODY AMEEEGO", req.body);
   if (!req.body) {
     res.status(400).json({ message: "Please insert an email" });
   } else {

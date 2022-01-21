@@ -23,7 +23,9 @@ class AuthPage extends HTMLElement {
           state.setUserToken(res.token);
           Router.go(userRoute);
         } else {
-          alert(`${res.message}, Please try again`);
+          alert(
+            "Contraseña inválida, por favor ingrese nuevamente su contraseña"
+          );
         }
       });
       target.password.value = "";

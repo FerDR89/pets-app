@@ -51,21 +51,6 @@ const state = {
     return this.data;
   },
 
-  setState(newState) {
-    this.data = newState;
-    for (const cb of this.listeners) {
-      cb();
-    }
-    // localStorage.setItem("localData", JSON.stringify(newState));
-    console.log("State", this.data);
-  },
-
-  setUserEmail(email: string) {
-    const cs = this.getState();
-    cs.user.userEmail = email;
-    this.setState(cs);
-  },
-
   getUserId() {
     const cs = this.getState();
     const email = cs.user.userEmail;
@@ -94,15 +79,30 @@ const state = {
       .then((result) => result);
   },
 
+  setState(newState) {
+    this.data = newState;
+    for (const cb of this.listeners) {
+      cb();
+    }
+    // localStorage.setItem("localData", JSON.stringify(newState));
+    console.log("State", this.data);
+  },
+
   setUserId(userId: number) {
     const cs = this.getState();
     cs.user.userId = userId;
     this.setState(cs);
   },
 
-  setUserToken(userToken: string) {
+  setUserEmail(email: string) {
     const cs = this.getState();
-    cs.user.userToken = userToken;
+    cs.user.userEmail = email;
+    this.setState(cs);
+  },
+
+  setUserName(name: string) {
+    const cs = this.getState();
+    cs.user.userName = name;
     this.setState(cs);
   },
 
@@ -112,11 +112,28 @@ const state = {
     this.setState(cs);
   },
 
-  // setUserName(name: string) {
-  //   const cs = this.getState();
-  //   cs.userName = name;
-  //   this.setState(cs);
-  // },
+  setUserToken(userToken: string) {
+    const cs = this.getState();
+    cs.user.userToken = userToken;
+    this.setState(cs);
+  },
+
+  setUserData(password) {
+    const cs = this.getState();
+    const userData = {
+      fullname: cs.user.userName,
+      email: cs.user.userEmail,
+      password: password,
+    };
+    console.log("SOY EL STATE", userData);
+    fetch(API_URL + "/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+  },
 
   setGuessLoc(lng: number, lat: number) {
     const cs = this.getState();
@@ -142,7 +159,7 @@ const state = {
 
   sendReport() {
     const cs = this.getState();
-    const dataUser = {
+    const userData = {
       guessName: cs.guess.guessName,
       guessPhone: cs.guess.guessPhone,
       guessReportPet: cs.guess.guessReportPet,
@@ -153,7 +170,7 @@ const state = {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(dataUser),
+      body: JSON.stringify(userData),
     });
   },
 

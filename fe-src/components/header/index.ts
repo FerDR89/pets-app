@@ -20,16 +20,16 @@ class CustomHeader extends HTMLElement {
       menuMobile.classList.toggle("show");
     });
 
-    const meEl = this.shadow.getElementById("me");
-    const myPetsEl = this.shadow.getElementById("my-pets");
-    const reportPetsEl = this.shadow.getElementById("report-pets");
-
-    const cs = state.getState();
-    const userEmail = cs.user.userEmail;
-    const userToken = cs.user.userToken;
+    const meEl = this.shadow.querySelector(".me");
+    const myPetsEl = this.shadow.querySelector(".my-pets");
+    const reportPetsEl = this.shadow.querySelector(".report-pets");
 
     meEl.addEventListener("click", () => {
+      const cs = state.getState();
+      const userEmail = cs.user.userEmail;
+      const userToken = cs.user.userToken;
       if (!userEmail && !userToken) {
+        console.log("Estoy dentro del if en meEl");
         state.setUserRoute("/me");
         Router.go("/sign-in");
       } else {
@@ -38,7 +38,12 @@ class CustomHeader extends HTMLElement {
     });
 
     myPetsEl.addEventListener("click", () => {
+      const cs = state.getState();
+      const userEmail = cs.user.userEmail;
+      const userToken = cs.user.userToken;
+
       if (!userEmail && !userToken) {
+        console.log("Estoy dentro del if en myPetsEl");
         state.setUserRoute("/my-pets");
         Router.go("/sign-in");
       } else {
@@ -47,7 +52,12 @@ class CustomHeader extends HTMLElement {
     });
 
     reportPetsEl.addEventListener("click", () => {
+      const cs = state.getState();
+      const userEmail = cs.user.userEmail;
+      const userToken = cs.user.userToken;
+
       if (!userEmail && !userToken) {
+        console.log("Estoy dentro del if en reportPetsEl");
         state.setUserRoute("/report-pets");
         Router.go("/sign-in");
       } else {
@@ -62,7 +72,7 @@ class CustomHeader extends HTMLElement {
     headerEl.innerHTML = `
       <div class="header__img-container">
         <a href="/welcome">
-          <img src="${icon}" alt="paw image" class="header__img" />
+          <img src="${icon}" alt="dog and cat image" class="header__img" />
         </a>
       </div>
       <nav class="header__menu-nav">
@@ -70,13 +80,13 @@ class CustomHeader extends HTMLElement {
         <div class="header__menu-container">
           <ul class="header__menu-list">
             <li class="header__menu-item">
-              <a id="me" class="header__menu-link">Mis datos</a>
+              <a class="header__menu-link me">Mis datos</a>
             </li>
             <li class="header__menu-item">
-              <a id="my-pets" class="header__menu-link , my-pets">Mis mascotas reportadas</a>
+              <a class="header__menu-link my-pets">Mis mascotas reportadas</a>
             </li>
             <li class="header__menu-item">
-              <a id="report-pets" class="header__menu-link , report-pets">Reportar mascotas</a>
+              <a class="header__menu-link report-pets">Reportar mascotas</a>
             </li>
           </ul>
           <div class="header__sesion-container">
