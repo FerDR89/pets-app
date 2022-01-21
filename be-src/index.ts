@@ -2,7 +2,7 @@ import * as express from "express";
 import * as path from "path";
 import * as cors from "cors";
 import * as jwt from "jsonwebtoken";
-import { sgMail } from "../be-src/lib/sengrid";
+import { sgMail } from "./lib/sengrid";
 require("dotenv").config();
 const SECRET = process.env.SECRET_KEY;
 import { algoliaPets, algoliaUsers } from "./lib/algolia";
@@ -292,13 +292,13 @@ app.get("/test-report", async (req, res) => {
 //Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
 // lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
 
-app.use(express.static(path.resolve(__dirname, "../fe-dist")));
+// app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
-// app.use(express.static(path.resolve(__dirname, "../dist")));
+app.use(express.static(path.resolve(__dirname, "../dist")));
 
 app.get("*", (req, res) => {
-  const ruta = path.resolve(__dirname, "../fe-src/index.html");
-  // const ruta = path.resolve(__dirname, "../dist/index.html");
+  // const ruta = path.resolve(__dirname, "../fe-src/index.html");
+  const ruta = path.resolve(__dirname, "../dist/index.html");
   res.sendFile(ruta);
 });
 
