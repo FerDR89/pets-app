@@ -58,7 +58,7 @@ class CustomCard extends HTMLElement {
       width:335px;
       height:235px;
       background: rgba( 255, 255, 255, 0.25 );
-      box-shadow: 0 8px 32px 0 rgba( 211, 213, 79, 0.5 );;
+      box-shadow: 0 8px 32px 0 rgba( 211, 213, 79, 0.5 );
       border-radius: 10px;
       margin-bottom:15px;
     }

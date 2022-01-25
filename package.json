@@ -14,6 +14,8 @@
     "dropzone": "^6.0.0-beta.2",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
+    "mapbox": "^1.0.0-beta10",
+    "mapbox-gl": "^2.6.1",
     "parcel": "^2.0.1",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
@@ -28,5 +30,8 @@
     "build:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist",
     "build": "npm run build:be && npm run build:fe",
     "start": "node ./be-dist/index.js"
+  },
+  "devDependencies": {
+    "@types/mapbox-gl": "^2.6.0"
   }
 }

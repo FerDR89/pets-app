@@ -85,7 +85,7 @@ class WelcomePage extends HTMLElement {
         width:100%;
         height:50px;
         border:none;
-        border-radius:2px;
+        border-radius:5px;
       }
       
       .welcome__btn{
@@ -94,7 +94,7 @@ class WelcomePage extends HTMLElement {
         background-color: var(--btn-bg1);
         color: var(--font-colorWht);
         border:none;
-        border-radius:2px;
+        border-radius:5px;
         font-size:16px;
         font-weight:700;
     }

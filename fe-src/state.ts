@@ -125,13 +125,54 @@ const state = {
       email: cs.user.userEmail,
       password: password,
     };
-    console.log("SOY EL STATE", userData);
     fetch(API_URL + "/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
+    });
+  },
+
+  updateUserData(password?) {
+    const cs = this.getState();
+    const fullname = cs.user.userName;
+    const userToken = cs.user.userToken;
+    const userData = {
+      fullname,
+      password: password,
+    };
+    fetch(API_URL + "/my-profile", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "bearer " + userToken,
+      },
+      body: JSON.stringify(userData),
+    });
+  },
+
+  setPetName(name: string) {
+    const cs = this.getState();
+    cs.pet.petName = name;
+    this.setState(cs);
+  },
+
+  createPet() {
+    const cs = this.getState();
+    const petData = {
+      fullname: cs.pet.petName,
+      imgURL: cs.pet.petImgURL,
+      lost_geo_lat: cs.pet.petLoc.lat,
+      lost_geo_lng: cs.pet.petLoc.lng,
+      found_it: false,
+    };
+    fetch(API_URL + "/post-pet", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(petData),
     });
   },
 

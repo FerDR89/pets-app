@@ -14,21 +14,38 @@ class MePage extends HTMLElement {
   listeners() {
     const formEl = this.shadow.querySelector(".me-page__form");
     const userToken = this.cs.user.userToken;
-    if (!userToken) {
-      formEl.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const target = e.target as any;
-        const name = target.name.value;
-        const password = target.password.value;
-        const repeatPassword = target["repeat-pass"].value;
+
+    formEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const target = e.target as any;
+      const name = target.name.value;
+      state.setUserName(name);
+      const password = target.password.value;
+      const repeatPassword = target["repeat-pass"].value;
+
+      if (password && repeatPassword) {
         const validPass = this.checkPassword(password, repeatPassword);
-        state.setUserName(name);
-        state.setUserData(validPass);
-        Router.go("/sign-in");
-      });
-    } else {
-      console.log("HOLA MUNDO!");
-    }
+        if (!userToken) {
+          if (validPass) {
+            console.log("NO TIENEN TOKE Y LA PASS ES VALIDA");
+
+            state.setUserData(validPass);
+            Router.go("/sign-in");
+            console.log("Estoy en mis datos dentro del newUser");
+          }
+        } else {
+          console.log("TIENEN TOKE Y LA PASS ES VALIDA");
+          if (validPass) {
+            state.updateUserData(validPass);
+            alert("Sus datos han sido actualizados correctamente");
+          }
+        }
+      } else {
+        console.log("TIENEN TOKE Y NO TIENE PASS");
+        state.updateUserData();
+        alert("Sus datos han sido actualizados correctamente");
+      }
+    });
   }
 
   checkPassword(pass, repeat) {
@@ -44,7 +61,6 @@ class MePage extends HTMLElement {
   }
 
   render() {
-    const userName = this.cs.user.userName;
     const sectionEl = document.createElement("section");
     sectionEl.className = "me-page";
     sectionEl.innerHTML = `
@@ -62,9 +78,7 @@ class MePage extends HTMLElement {
             name="name"
             type="text"
             placeholder="Ingresa tu nombre"
-            required
             autofocus
-            value="${userName}"
           />
       </fieldset>
       <fieldset class="me-page__fieldset-pass">
@@ -75,7 +89,6 @@ class MePage extends HTMLElement {
           name="password"
           type="password"
           placeholder="Ingresa tu contraseña"
-          required
         />
         <label class="me-page__label-repeat-pass" for="repeat-pass">REPETIR CONTRASEÑA</label>
         <input
@@ -84,7 +97,6 @@ class MePage extends HTMLElement {
           name="repeat-pass"
           type="password"
           placeholder="Ingresa nuevamente tu contraseña"
-          required
         />
     </fieldset>
       <div class="me-page__container-btn">
@@ -151,7 +163,7 @@ class MePage extends HTMLElement {
       width:100%;
       height:50px;
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
       padding-left:10px;
     }
 
@@ -168,7 +180,7 @@ class MePage extends HTMLElement {
       width: 100%;
       height: 50px;
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
     }
 
     .me-page__form-btn {
@@ -176,7 +188,7 @@ class MePage extends HTMLElement {
       min-height: 100%;
       background-color: var(--btn-bg1);
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
       font-size: 16px;
       font-weight: 700;
       color: var(--font-colorWht)

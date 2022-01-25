@@ -19,6 +19,7 @@ class SignInPage extends HTMLElement {
       state.getUserId().then((res) => {
         if (res.user_id > 0) {
           state.setUserId(res.user_id);
+          state.setUserName(res.userName);
           Router.go("/auth");
         } else {
           Router.go("/me");

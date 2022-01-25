@@ -156,7 +156,7 @@ class PetsAroundPage extends HTMLElement {
         width:100%;
         height:50px;
         border:none;
-        border-radius:2px;
+        border-radius:5px;
       }
       
     .pets-around__btn{
@@ -164,7 +164,7 @@ class PetsAroundPage extends HTMLElement {
       min-height:100%;
       background-color: var(--btn-bg1);
       border:none;
-      border-radius:2px;
+      border-radius:5px;
       font-size:16px;
       font-weight:700;
     }
@@ -256,7 +256,7 @@ class PetsAroundPage extends HTMLElement {
       width:100%;
       height:50px;
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
       padding-left:10px;
     }
 
@@ -265,7 +265,7 @@ class PetsAroundPage extends HTMLElement {
       width:100%;
       height:127px;
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
       padding-left:10px;
       padding-top:5px;
     }
@@ -279,7 +279,7 @@ class PetsAroundPage extends HTMLElement {
       width: 100%;
       height: 50px;
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
     }
 
     .modal__form-btn {
@@ -287,7 +287,7 @@ class PetsAroundPage extends HTMLElement {
       min-height: 100%;
       background-color: var(--btn-bg1);
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
       font-size: 16px;
       font-weight: 700;
       color: var(--font-colorWht)

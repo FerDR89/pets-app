@@ -30,9 +30,12 @@ app.post("/signin", async (req, res) => {
   } else {
     try {
       const user_id = await authFunc.getUserId(req.body.email);
-      user_id === 0
-        ? res.json({ message: "user not found" })
-        : res.json({ user_id });
+      if (user_id === 0) {
+        res.json({ message: "user not found" });
+      } else {
+        const { userName } = await searchUser(user_id);
+        res.json({ user_id, userName });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -43,7 +46,6 @@ app.post("/signin", async (req, res) => {
 Guardar el email del usuario en el state para reutilizarlo en este
 Cuando mando la info desde el state, asegurarme de parsearla a un string*/
 app.post("/auth", async (req, res) => {
-  console.log("SOY EL BODY AMEEEGO", req.body);
   if (!req.body) {
     res.status(400).json({ message: "Please insert an email" });
   } else {
@@ -85,7 +87,7 @@ function authMiddleware(req, res, next) {
   el token que enviamos a traves del header.
   Mediante el método split(" ") dividimos el string en un array indicandole a traves de un espacio entre las comillas que cada vez que encuentre un espacio vacio me genere una nueva posición del array quedandome así un array con dos posiciones. La primera la palabra bearer y luego el token*/
   const token = req.headers.authorization.split(" ")[1];
-
+  console.log("Soy el token", token);
   try {
     const data = jwt.verify(token, SECRET);
     req._userData = data;
@@ -98,22 +100,35 @@ function authMiddleware(req, res, next) {
 /*Cuando envio los datos desde el front, lo tengo que hacer junto al header authorization y el token */
 app.patch("/my-profile", authMiddleware, async (req, res) => {
   const { user_id } = req._userData;
-  const { fullname, password } = req.body;
-  if (!fullname && !password && !user_id) {
+  if (!req.body) {
     res.status(401).json({ message: "your information is not complete" });
   } else {
+    const { fullname, password } = req.body;
     try {
       let updatedData = { fullname };
-      const existUser = await updateUser(user_id, updatedData);
-      const existAuthUser = await authFunc.updateAuthUser(user_id, password);
-      if (existUser === true && existAuthUser === true) {
+      if (fullname && password) {
+        const existUser = await updateUser(user_id, updatedData);
+        const existAuthUser = await authFunc.updateAuthUser(user_id, password);
         res.json({
           updateUser: true,
-          updateAuthUser: true,
+          updateAuth: true,
         });
-      } else {
-        res.status(501).json({
-          message: "error server",
+      }
+      if (fullname) {
+        const existUser = await updateUser(user_id, updatedData);
+        console.log("Dentro del 2do if");
+        console.log(fullname);
+        res.json({
+          updateUser: true,
+        });
+      }
+
+      if (password) {
+        const existAuthUser = await authFunc.updateAuthUser(user_id, password);
+        console.log("Dentro del 3er if");
+        console.log(password);
+        res.json({
+          updateAuth: true,
         });
       }
     } catch (error) {
@@ -243,7 +258,7 @@ app.post("/report-pet", async (req, res) => {
       const report = await reportPet(req.body, pet_id);
       if (report == true) {
         const { user_id, petName } = await petFunc.searchPet(pet_id);
-        const userEmail = (await searchUser(user_id)) as any;
+        const { userEmail } = await searchUser(user_id);
         //VER DE EXTRAER ESTO EN UNA FUNCIÓN
         const msg = {
           to: userEmail,

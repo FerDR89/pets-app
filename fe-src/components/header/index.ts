@@ -20,50 +20,27 @@ class CustomHeader extends HTMLElement {
       menuMobile.classList.toggle("show");
     });
 
+    function itemMenuListener(e) {
+      const cs = state.getState();
+      const userEmail = cs.user.userEmail;
+      const userToken = cs.user.userToken;
+      const linkRef = this.getAttribute("link");
+      Router.go(linkRef);
+      if (userEmail && userToken) {
+        Router.go(linkRef);
+      } else {
+        state.setUserRoute(linkRef);
+        Router.go("/sign-in");
+      }
+    }
+
     const meEl = this.shadow.querySelector(".me");
     const myPetsEl = this.shadow.querySelector(".my-pets");
     const reportPetsEl = this.shadow.querySelector(".report-pets");
 
-    meEl.addEventListener("click", () => {
-      const cs = state.getState();
-      const userEmail = cs.user.userEmail;
-      const userToken = cs.user.userToken;
-      if (!userEmail && !userToken) {
-        console.log("Estoy dentro del if en meEl");
-        state.setUserRoute("/me");
-        Router.go("/sign-in");
-      } else {
-        Router.go("/me");
-      }
-    });
-
-    myPetsEl.addEventListener("click", () => {
-      const cs = state.getState();
-      const userEmail = cs.user.userEmail;
-      const userToken = cs.user.userToken;
-
-      if (!userEmail && !userToken) {
-        console.log("Estoy dentro del if en myPetsEl");
-        state.setUserRoute("/my-pets");
-        Router.go("/sign-in");
-      } else {
-        Router.go("/my-pets");
-      }
-    });
-
-    reportPetsEl.addEventListener("click", () => {
-      const cs = state.getState();
-      const userEmail = cs.user.userEmail;
-      const userToken = cs.user.userToken;
-
-      if (!userEmail && !userToken) {
-        console.log("Estoy dentro del if en reportPetsEl");
-        state.setUserRoute("/report-pets");
-        Router.go("/sign-in");
-      } else {
-        Router.go("/report-pets");
-      }
-    });
+    meEl.addEventListener("click", itemMenuListener);
+    myPetsEl.addEventListener("click", itemMenuListener);
+    reportPetsEl.addEventListener("click", itemMenuListener);
   }
 
   render() {
@@ -80,13 +57,13 @@ class CustomHeader extends HTMLElement {
         <div class="header__menu-container">
           <ul class="header__menu-list">
             <li class="header__menu-item">
-              <a class="header__menu-link me">Mis datos</a>
+              <a class="header__menu-link me" link="/me">Mis datos</a>
             </li>
             <li class="header__menu-item">
-              <a class="header__menu-link my-pets">Mis mascotas reportadas</a>
+              <a class="header__menu-link my-pets" link="/my-pets">Mis mascotas reportadas</a>
             </li>
             <li class="header__menu-item">
-              <a class="header__menu-link report-pets">Reportar mascotas</a>
+              <a class="header__menu-link report-pets" link="/report-pets">Reportar mascotas</a>
             </li>
           </ul>
           <div class="header__sesion-container">
