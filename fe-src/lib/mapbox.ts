@@ -1,11 +1,13 @@
 import mapboxgl from "mapbox-gl";
 import * as MapboxClient from "mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
-require("dotenv").config();
 
-const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
+const MAPBOX_TOKEN =
+  "pk.eyJ1IjoiZmVyZHI4OWRldiIsImEiOiJja3l1ZXZqOXgxbmY5MnVsdWpqbmVrZXNiIn0.suMetmzHmx4QIFU4i5-xXg";
+
+const mapboxClient = new MapboxClient(MAPBOX_TOKEN);
 function initMap(mapEl) {
-  mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
+  mapboxgl.accessToken = MAPBOX_TOKEN;
   return new mapboxgl.Map({
     container: mapEl, // container ID
     center: [-122.420679, 37.772537], // starting position [lng, lat]
