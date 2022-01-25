@@ -1,6 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import * as MapboxClient from "mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
+require("dotenv").config();
 
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
 function initMap(mapEl) {
