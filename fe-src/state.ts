@@ -20,24 +20,14 @@ const state = {
       guessPhone: "",
       guessReportPet: "",
       guessReportPetId: "",
-      //Array con la info de todas las pets cercanas para mostrar al invitado
-      petsAround: [
-        // {
-        //   petName: "",
-        //   petImgURL: "",
-        //   petLoc: {
-        //     lng: "",
-        //     lat: "",
-        //   },
-        //   found_it: "",
-        // },
-      ],
+      petsAround: [],
     },
 
     //Objeto con la info de 1 mascota
     pet: {
       petName: "",
       petImgURL: "",
+      petPlaceLost: "",
       petLoc: {
         lng: "",
         lat: "",
@@ -134,7 +124,7 @@ const state = {
     });
   },
 
-  updateUserData(password?) {
+  updateUserData(callback, password?) {
     const cs = this.getState();
     const fullname = cs.user.userName;
     const userToken = cs.user.userToken;
@@ -149,7 +139,9 @@ const state = {
         Authorization: "bearer " + userToken,
       },
       body: JSON.stringify(userData),
-    });
+    })
+      .then((res) => res.json())
+      .then((result) => callback(result));
   },
 
   setPetName(name: string) {
@@ -158,22 +150,33 @@ const state = {
     this.setState(cs);
   },
 
-  createPet() {
+  setPetPlaceLost(place: string) {
     const cs = this.getState();
+    cs.pet.petPlaceLost = place;
+    this.setState(cs);
+  },
+
+  createPet(callback) {
+    const cs = this.getState();
+    const userToken = cs.user.userToken;
     const petData = {
       fullname: cs.pet.petName,
       imgURL: cs.pet.petImgURL,
       lost_geo_lat: cs.pet.petLoc.lat,
       lost_geo_lng: cs.pet.petLoc.lng,
+      place_lost: cs.pet.petPlaceLost,
       found_it: false,
     };
     fetch(API_URL + "/post-pet", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "bearer " + userToken,
       },
       body: JSON.stringify(petData),
-    });
+    })
+      .then((res) => res.json())
+      .then((result) => callback(result));
   },
 
   setGuessLoc(lng: number, lat: number) {
@@ -181,6 +184,19 @@ const state = {
     cs.guess.guessLoc.lng = lng;
     cs.guess.guessLoc.lat = lat;
     this.setState(cs);
+  },
+
+  getPetsAround(callback) {
+    const cs = this.getState();
+    const lat = cs.guess.guessLoc.lat;
+    const lng = cs.guess.guessLoc.lng;
+    fetch(API_URL + "/pets-around?lat=" + lat + "&lng=" + lng)
+      .then((res) => res.json())
+      .then((result) => {
+        cs.guess.petsAround = result;
+        this.setState(cs);
+        callback();
+      });
   },
 
   setGuessReportPetId(pet_id: number) {

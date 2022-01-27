@@ -61,8 +61,18 @@ class ReportPetsPage extends HTMLElement {
       e.preventDefault();
       const target = e.target as any;
       const petName = target.name.value;
+      const petPlaceLost = target.search.value;
       state.setPetName(petName);
-      state.createPet();
+      state.setPetPlaceLost(petPlaceLost);
+      state.createPet((result) => {
+        if (result.newPet == true && result.updateUser == true) {
+          alert("Su mascota fue reportada con éxito");
+        } else {
+          alert(
+            "Hubo un problema con la carga de su mascota, por favor intente más tarde"
+          );
+        }
+      });
     });
 
     const cancelEl = this.shadow.querySelector(".btn__greey");

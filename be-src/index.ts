@@ -87,7 +87,6 @@ function authMiddleware(req, res, next) {
   el token que enviamos a traves del header.
   Mediante el método split(" ") dividimos el string en un array indicandole a traves de un espacio entre las comillas que cada vez que encuentre un espacio vacio me genere una nueva posición del array quedandome así un array con dos posiciones. La primera la palabra bearer y luego el token*/
   const token = req.headers.authorization.split(" ")[1];
-  console.log("Soy el token", token);
   try {
     const data = jwt.verify(token, SECRET);
     req._userData = data;
@@ -116,8 +115,6 @@ app.patch("/my-profile", authMiddleware, async (req, res) => {
       }
       if (fullname) {
         const existUser = await updateUser(user_id, updatedData);
-        console.log("Dentro del 2do if");
-        console.log(fullname);
         res.json({
           updateUser: true,
         });
@@ -185,6 +182,9 @@ function checkDataPet(body) {
   if (body.imgURL) {
     respuesta.imgURL = body.imgURL;
   }
+  if (body.place_lost) {
+    respuesta.place_lost = body.place_lost;
+  }
   if (body.lost_geo_lat) {
     respuesta.lost_geo_lat = body.lost_geo_lat;
   }
@@ -245,8 +245,10 @@ app.delete("/delete-pet", authMiddleware, async (req, res) => {
 });
 
 //SEGUIR UNA VEZ QUE PUEDA SUBIR/MODIFICAR MASCOTAS DESDE EL FRONT
-app.get("/pets-around", (req, res) => {
+app.get("/pets-around", async (req, res) => {
   const { lat, lng } = req.query;
+  const queryResult = await petFunc.searchPetsAround(lat, lng);
+  res.json(queryResult);
 });
 
 app.post("/report-pet", async (req, res) => {

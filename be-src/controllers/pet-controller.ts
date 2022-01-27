@@ -1,22 +1,22 @@
 import { Pet } from "../models/models";
 import { algoliaPets } from "../lib/algolia";
 import { cloudinary, cloudinaryOptions } from "../lib/cloudinary";
+import { Where } from "sequelize/dist/lib/utils";
+import { where } from "sequelize/dist";
 
 async function uploadPetImg(img: string) {
   return cloudinary.uploader.upload(img, cloudinaryOptions);
 }
 
 async function createPet(dataPet, user_id) {
-  const { fullname, imgURL, lost_geo_lat, lost_geo_lng } = dataPet;
-  //Cuando termine el front, descomentar y probar que funcione Cloudinary
-  // const img = await uploadPetImg(imgURL);
+  const { fullname, imgURL, lost_geo_lat, lost_geo_lng, place_lost } = dataPet;
+  const img = await uploadPetImg(imgURL);
   const newPet = await Pet.create({
     fullname,
-    //Cuando termine el front, descomentar y probar que funcione Cloudinary
-    // imgURL: img.secure_url,
-    imgURL,
+    imgURL: img.secure_url,
     lost_geo_lat: parseFloat(lost_geo_lat),
     lost_geo_lng: parseFloat(lost_geo_lng),
+    place_lost,
     found_it: false,
     userId: user_id,
   });
@@ -47,9 +47,9 @@ async function getMyPets(user_id) {
 }
 
 async function updatePet(dataPet, pet_id) {
-  const { fullname, imgURL, lost_geo_lat, lost_geo_lng, found_it } = dataPet;
-  //Cuando termine el front, descomentar y probar que funcione Cloudinary
-  // const img = await uploadPetImg(imgURL);
+  const { fullname, imgURL, lost_geo_lat, lost_geo_lng, found_it, place_lost } =
+    dataPet;
+  const img = await uploadPetImg(imgURL);
   await Pet.update(
     {
       ...dataPet,
@@ -60,16 +60,13 @@ async function updatePet(dataPet, pet_id) {
       },
     }
   );
-
-  if (lost_geo_lat && lost_geo_lng) {
-    algoliaPets.partialUpdateObject({
-      objectID: pet_id,
-      _geoloc: {
-        lat: lost_geo_lat,
-        lng: lost_geo_lng,
-      },
-    });
-  }
+  algoliaPets.partialUpdateObject({
+    objectID: pet_id,
+    _geoloc: {
+      lat: lost_geo_lat,
+      lng: lost_geo_lng,
+    },
+  });
   return true;
 }
 
@@ -92,7 +89,32 @@ async function searchPet(pet_id: number) {
   return objectPet;
 }
 
-//SEGUIR UNA VEZ QUE PUEDA SUBIR/MODIFICAR MASCOTAS DESDE EL FRONT
-async function searchPetsAround(lat, lng) {}
+async function searchPetsAround(lat, lng) {
+  const petsIdCol = [];
+  const result = await algoliaPets.search("", {
+    aroundLatLng: `${lat} , ${lng}`,
+    aroundRadius: 100000,
+  });
 
-export { createPet, getMyPets, updatePet, deletePet, searchPet };
+  for (const pet of result.hits) {
+    petsIdCol.push(pet.objectID);
+  }
+
+  const petsAround = await Pet.findAll({
+    where: {
+      id: petsIdCol,
+    },
+    attributes: ["id", "fullname", "imgURL", "place_lost"],
+  });
+
+  return petsAround;
+}
+
+export {
+  createPet,
+  getMyPets,
+  updatePet,
+  deletePet,
+  searchPet,
+  searchPetsAround,
+};

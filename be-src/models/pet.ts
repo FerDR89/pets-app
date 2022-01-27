@@ -9,6 +9,7 @@ Pet.init(
     imgURL: DataTypes.STRING,
     lost_geo_lat: DataTypes.FLOAT,
     lost_geo_lng: DataTypes.FLOAT,
+    place_lost: DataTypes.STRING,
     found_it: DataTypes.BOOLEAN,
   },
   { sequelize, modelName: "pet" }

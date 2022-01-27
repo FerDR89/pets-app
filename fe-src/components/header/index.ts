@@ -25,7 +25,6 @@ class CustomHeader extends HTMLElement {
       const userEmail = cs.user.userEmail;
       const userToken = cs.user.userToken;
       const linkRef = this.getAttribute("link");
-      Router.go(linkRef);
       if (userEmail && userToken) {
         Router.go(linkRef);
       } else {

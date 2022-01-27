@@ -51,6 +51,29 @@ class PetsAroundPage extends HTMLElement {
     });
   }
 
+  selectDataRender() {
+    const cs = state.getState();
+    const petsAroundCol = cs.guess.petsAround;
+    if (petsAroundCol.length > 0) {
+      const containerCardEl = this.shadow.querySelector(
+        ".pets-around__container-card"
+      );
+      containerCardEl.innerHTML = `
+      ${petsAroundCol.map(
+        (pet) =>
+          `<custom-card petId="${pet.id}" petImg="${pet.imgURL}" petName="${pet.fullname}" petLoc="${pet.place_lost}" cardView="link"></custom-card>`
+      )}  
+      `;
+    } else {
+      const containerTitleEl = this.shadow.querySelector(
+        ".pets-around__container-title"
+      );
+      containerTitleEl.innerHTML = `
+      <custom-text tag="h1" size="40px">Lo sentimos, no encontramos mascotas perdidas en las cercanias de tu ubicación</custom-text>
+      `;
+    }
+  }
+
   render() {
     const sectionEl = document.createElement("section");
     sectionEl.className = "pets-around";
@@ -60,12 +83,7 @@ class PetsAroundPage extends HTMLElement {
       <div class="pets-around__container-title">
         <custom-text tag="h1" size="40px">Mascotas perdidas cerca tuyo</custom-text>
       </div>
-      <div class="pets-around__container-card">
-        <custom-card petId="1" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
-        <custom-card petId="2" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
-        <custom-card petId="3" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
-        <custom-card petId="4" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
-        <custom-card petId="5" petImg="${perruna}" petName="Pickachu" petLoc="San Martín"></custom-card>
+      <div class="pets-around__container-card">  
       </div>
     </div>
 
@@ -296,6 +314,7 @@ class PetsAroundPage extends HTMLElement {
     `;
     this.shadow.appendChild(sectionEl);
     this.shadow.appendChild(style);
+    this.selectDataRender();
     this.listeners();
   }
 }

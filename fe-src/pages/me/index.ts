@@ -27,23 +27,32 @@ class MePage extends HTMLElement {
         const validPass = this.checkPassword(password, repeatPassword);
         if (!userToken) {
           if (validPass) {
-            console.log("NO TIENEN TOKE Y LA PASS ES VALIDA");
-
             state.setUserData(validPass);
             Router.go("/sign-in");
-            console.log("Estoy en mis datos dentro del newUser");
           }
         } else {
-          console.log("TIENEN TOKE Y LA PASS ES VALIDA");
           if (validPass) {
-            state.updateUserData(validPass);
-            alert("Sus datos han sido actualizados correctamente");
+            state.updateUserData((result) => {
+              if (result.updateUser == true || result.updateAuth == true) {
+                alert("Sus datos han sido actualizados correctamente");
+              } else {
+                alert(
+                  "Hubo un problema con la carga de sus datos, por favor intente luego"
+                );
+              }
+            }, validPass);
           }
         }
       } else {
-        console.log("TIENEN TOKE Y NO TIENE PASS");
-        state.updateUserData();
-        alert("Sus datos han sido actualizados correctamente");
+        state.updateUserData((result) => {
+          if (result.updateUser == true || result.updateAuth == true) {
+            alert("Sus datos han sido actualizados correctamente");
+          } else {
+            alert(
+              "Hubo un problema con la carga de sus datos, por favor intente luego"
+            );
+          }
+        });
       }
     });
   }

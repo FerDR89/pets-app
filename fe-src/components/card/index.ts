@@ -4,6 +4,7 @@ class CustomCard extends HTMLElement {
   petImg: string;
   petName: string;
   petLoc: string;
+  cardView: string;
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
@@ -11,22 +12,40 @@ class CustomCard extends HTMLElement {
     this.petImg = this.getAttribute("petImg");
     this.petName = this.getAttribute("petName");
     this.petLoc = this.getAttribute("petLoc");
+    this.cardView = this.getAttribute("cardView");
   }
   connectedCallback() {
     this.render();
   }
 
   listeners() {
-    const linkReportEl = this.shadow.querySelector(".card__report-link");
-    linkReportEl.addEventListener("click", () => {
-      const report = new CustomEvent("report", {
-        detail: {
-          petId: this.petId,
-        },
-        bubbles: true,
+    const cardView = this.cardView;
+    if (cardView == "link") {
+      const linkReportEl = this.shadow.querySelector(".card__report-link");
+      linkReportEl.addEventListener("click", () => {
+        const report = new CustomEvent("report", {
+          detail: {
+            petId: this.petId,
+          },
+          bubbles: true,
+        });
+        this.dispatchEvent(report);
       });
-      this.dispatchEvent(report);
-    });
+    }
+  }
+
+  selectViewCard() {
+    const cardView = this.cardView;
+    const cardReportEl = this.shadow.querySelector(".card__report-container");
+    if (cardView == "link") {
+      cardReportEl.innerHTML = `
+      <custom-text class="card__report-link" size="16px" style="color:var(--font-link-color); text-decoration-line:underline; text-transform:uppercase">reportar información</custom-text>
+      `;
+    } else {
+      cardReportEl.innerHTML = `
+      <p>Hola Mundo!</p>
+      `;
+    }
   }
 
   render() {
@@ -46,7 +65,6 @@ class CustomCard extends HTMLElement {
                 </div>
             </div>
             <div class="card__report-container">
-                <custom-text class="card__report-link" size="16px" style="color:var(--font-link-color); text-decoration-line:underline; text-transform:uppercase">reportar información</custom-text>
             </div>
           </div>
     `;
@@ -90,6 +108,19 @@ class CustomCard extends HTMLElement {
       width: 100%;
       height: 100%;
     }
+    
+    .card__name-container, .card__location-container{
+      overflow: hidden;
+      width: 100%;
+      word-break: break-word;
+      height: 25px;
+    }
+    .card__name-container{
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
     .card__report-container {
       width: 100%;
       height: 100%;
@@ -100,6 +131,7 @@ class CustomCard extends HTMLElement {
       `;
     this.shadow.appendChild(style);
     this.shadow.appendChild(cardEl);
+    this.selectViewCard();
     this.listeners();
   }
 }

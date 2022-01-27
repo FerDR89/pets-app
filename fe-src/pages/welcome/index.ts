@@ -18,7 +18,9 @@ class WelcomePage extends HTMLElement {
         const lng = position.coords.longitude;
         const lat = position.coords.latitude;
         state.setGuessLoc(lng, lat);
-        Router.go("/pets-around");
+        state.getPetsAround(() => {
+          Router.go("/pets-around");
+        });
       }
 
       const error = (error) => {
