@@ -199,6 +199,23 @@ const state = {
       });
   },
 
+  getMyPets(callback) {
+    const cs = this.getState();
+    const userToken = cs.user.userToken;
+    fetch(API_URL + "/get-my-pets", {
+      method: "GET",
+      headers: {
+        Authorization: "bearer " + userToken,
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        cs.user.pets = result;
+        this.setState(cs);
+        callback();
+      });
+  },
+
   setGuessReportPetId(pet_id: number) {
     const cs = this.getState();
     cs.guess.guessReportPetId = pet_id;

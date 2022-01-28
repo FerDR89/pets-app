@@ -120,7 +120,8 @@ class AuthPage extends HTMLElement {
 
     .auth__forget-pass{
       text-transform:uppercase;
-      color: var(--font-link-color)
+      color: var(--font-link-color);
+      cursor:pointer;
     }
 
     .auth__container-btn {
@@ -138,7 +139,8 @@ class AuthPage extends HTMLElement {
       border-radius: 2px;
       font-size: 16px;
       font-weight: 700;
-      color: var(--font-colorWht)
+      color: var(--font-colorWht);
+      cursor:pointer;
     }
     `;
     this.shadow.appendChild(sectionEl);

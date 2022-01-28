@@ -1,3 +1,5 @@
+const editIcon = require("../../assets/editar.png");
+
 class CustomCard extends HTMLElement {
   shadow: ShadowRoot;
   petId: number;
@@ -20,18 +22,18 @@ class CustomCard extends HTMLElement {
 
   listeners() {
     const cardView = this.cardView;
-    if (cardView == "link") {
-      const linkReportEl = this.shadow.querySelector(".card__report-link");
-      linkReportEl.addEventListener("click", () => {
-        const report = new CustomEvent("report", {
-          detail: {
-            petId: this.petId,
-          },
-          bubbles: true,
-        });
-        this.dispatchEvent(report);
+    const linkReportEl =
+      this.shadow.querySelector(".card__report-link") ||
+      this.shadow.querySelector(".card__edit-icon");
+    linkReportEl.addEventListener("click", () => {
+      const report = new CustomEvent("report", {
+        detail: {
+          petId: this.petId,
+        },
+        bubbles: true,
       });
-    }
+      this.dispatchEvent(report);
+    });
   }
 
   selectViewCard() {
@@ -39,11 +41,11 @@ class CustomCard extends HTMLElement {
     const cardReportEl = this.shadow.querySelector(".card__report-container");
     if (cardView == "link") {
       cardReportEl.innerHTML = `
-      <custom-text class="card__report-link" size="16px" style="color:var(--font-link-color); text-decoration-line:underline; text-transform:uppercase">reportar información</custom-text>
+      <custom-text class="card__report-link" size="16px" style="color:var(--font-link-color); text-decoration-line:underline; text-transform:uppercase; cursor:pointer;">reportar información</custom-text>
       `;
     } else {
       cardReportEl.innerHTML = `
-      <p>Hola Mundo!</p>
+      <img src="${editIcon}" alt="pen image" class="card__edit-icon" />  
       `;
     }
   }
@@ -111,7 +113,7 @@ class CustomCard extends HTMLElement {
     
     .card__name-container, .card__location-container{
       overflow: hidden;
-      width: 100%;
+      width: 157px;
       word-break: break-word;
       height: 25px;
     }
@@ -121,12 +123,21 @@ class CustomCard extends HTMLElement {
       flex-direction: column;
       justify-content: center;
     }
+    
+    .card__edit-icon{
+      width: 30px;
+      height: 30px;
+      cursor:pointer;
+      margin-right: 20px;
+    }
+
     .card__report-container {
       width: 100%;
       height: 100%;
       text-align: right;
       display: flex;
       align-items: center;
+      justify-content: flex-end;
     }
       `;
     this.shadow.appendChild(style);

@@ -200,7 +200,8 @@ class MePage extends HTMLElement {
       border-radius: 5px;
       font-size: 16px;
       font-weight: 700;
-      color: var(--font-colorWht)
+      color: var(--font-colorWht);
+      cursor:pointer;
     }
     `;
     this.shadow.appendChild(sectionEl);

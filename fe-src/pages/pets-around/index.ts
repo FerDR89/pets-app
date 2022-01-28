@@ -1,6 +1,5 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
-const perruna = require("../../assets/perruna.jpg");
 
 class PetsAroundPage extends HTMLElement {
   shadow: ShadowRoot;
@@ -185,6 +184,7 @@ class PetsAroundPage extends HTMLElement {
       border-radius:5px;
       font-size:16px;
       font-weight:700;
+      cursor:pointer;
     }
 
     /*--------------MODAL------------*/
@@ -212,6 +212,7 @@ class PetsAroundPage extends HTMLElement {
 
     .modal__container-exit {
       position: relative;
+      cursor:pointer;
     }
 
     .modal__exit-line1, .modal__exit-line2 {
@@ -308,7 +309,8 @@ class PetsAroundPage extends HTMLElement {
       border-radius: 5px;
       font-size: 16px;
       font-weight: 700;
-      color: var(--font-colorWht)
+      color: var(--font-colorWht);
+      cursor:pointer;
     }
 
     `;

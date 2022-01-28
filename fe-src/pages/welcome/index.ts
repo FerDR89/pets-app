@@ -99,6 +99,7 @@ class WelcomePage extends HTMLElement {
         border-radius:5px;
         font-size:16px;
         font-weight:700;
+        cursor:pointer;
     }
 
     `;

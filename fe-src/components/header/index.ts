@@ -189,7 +189,8 @@ class CustomHeader extends HTMLElement {
         text-decoration:none;
         font-size:24px;
         font-weight:700;
-        color: var(--font-colorBlk)
+        color: var(--font-colorBlk);
+        cursor:pointer;
       }
 
       .header__sesion-container{
