@@ -6,14 +6,23 @@ const MAPBOX_TOKEN =
   "pk.eyJ1IjoiZmVyZHI4OWRldiIsImEiOiJja3l1ZXZqOXgxbmY5MnVsdWpqbmVrZXNiIn0.suMetmzHmx4QIFU4i5-xXg";
 
 const mapboxClient = new MapboxClient(MAPBOX_TOKEN);
-function initMap(mapEl) {
+function initMap(mapEl, lng?, lat?) {
   mapboxgl.accessToken = MAPBOX_TOKEN;
-  return new mapboxgl.Map({
-    container: mapEl, // container ID
-    center: [-122.420679, 37.772537], // starting position [lng, lat]
-    zoom: 13, // starting zoom
-    style: "mapbox://styles/mapbox/streets-v11",
-  });
+  if (lng && lat) {
+    return new mapboxgl.Map({
+      container: mapEl, // container ID
+      center: [lng, lat], // starting position [lng, lat]
+      zoom: 15, // starting zoom
+      style: "mapbox://styles/mapbox/streets-v11",
+    });
+  } else {
+    return new mapboxgl.Map({
+      container: mapEl, // container ID
+      center: [-58.38162, -34.60376], // starting position [lng, lat]
+      zoom: 13, // starting zoom
+      style: "mapbox://styles/mapbox/streets-v11",
+    });
+  }
 }
 
 async function initSearchForm(query) {

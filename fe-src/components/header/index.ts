@@ -1,5 +1,6 @@
 const icon = require("../../assets/pet-icon.png");
 import { Router } from "@vaadin/router";
+import { stat } from "fs";
 import { state } from "../../state";
 
 class CustomHeader extends HTMLElement {
@@ -15,6 +16,7 @@ class CustomHeader extends HTMLElement {
   listeners() {
     const toggle = this.shadow.querySelector(".header__menu-burguer");
     const menuMobile = this.shadow.querySelector(".header__menu-container");
+
     toggle.addEventListener("click", () => {
       toggle.classList.toggle("active");
       menuMobile.classList.toggle("show");
@@ -40,9 +42,20 @@ class CustomHeader extends HTMLElement {
     meEl.addEventListener("click", itemMenuListener);
     myPetsEl.addEventListener("click", itemMenuListener);
     reportPetsEl.addEventListener("click", itemMenuListener);
+
+    const closeSesion = this.shadow.querySelector(".header__close-sesion");
+    closeSesion.addEventListener("click", () => {
+      state.resetState(() => {
+        toggle.classList.toggle("active");
+        menuMobile.classList.toggle("show");
+        Router.go("/welcome");
+      });
+    });
   }
 
   render() {
+    const cs = state.getState();
+    const { userEmail } = cs.user;
     const headerEl = document.createElement("header");
     headerEl.className = "header";
     headerEl.innerHTML = `
@@ -66,7 +79,7 @@ class CustomHeader extends HTMLElement {
             </li>
           </ul>
           <div class="header__sesion-container">
-            <p class="header__user-email">fernando@fernando.com</p>
+          <p class="header__user-email">${userEmail}</p>
             <a href="/welcome" class="header__close-sesion">Cerrar sesión</a>
           </div>
         </div>
@@ -211,7 +224,8 @@ class CustomHeader extends HTMLElement {
       
       .header__close-sesion{
         text-transform:uppercase;
-        color: var(--font-link-color)
+        color: var(--font-link-color);
+        cursor:pointer;
       }
       `;
     this.shadow.appendChild(style);

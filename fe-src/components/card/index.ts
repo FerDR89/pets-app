@@ -21,7 +21,6 @@ class CustomCard extends HTMLElement {
   }
 
   listeners() {
-    const cardView = this.cardView;
     const linkReportEl =
       this.shadow.querySelector(".card__report-link") ||
       this.shadow.querySelector(".card__edit-icon");

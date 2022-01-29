@@ -2,7 +2,7 @@ import "./router";
 import "./components/header";
 import "./components/text";
 import "./components/card";
-import "./pages/edit-pets";
+import "./pages/edit-pet";
 import "./pages/me";
 import "./pages/my-pets";
 import "./pages/pets-around";

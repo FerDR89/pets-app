@@ -70,6 +70,8 @@ class MePage extends HTMLElement {
   }
 
   render() {
+    const cs = state.getState();
+    const { userName } = cs.user;
     const sectionEl = document.createElement("section");
     sectionEl.className = "me-page";
     sectionEl.innerHTML = `
@@ -86,7 +88,7 @@ class MePage extends HTMLElement {
             id="name"
             name="name"
             type="text"
-            placeholder="Ingresa tu nombre"
+            placeholder=${userName}
             autofocus
           />
       </fieldset>

@@ -221,15 +221,16 @@ app.patch("/update-pet", authMiddleware, async (req, res) => {
   }
 });
 
-/*Desde el front cuando hago click en editar la mascota, de alguna manera tengo que conseguir su id y pasarlo en el body*/
-app.delete("/delete-pet", authMiddleware, async (req, res) => {
+app.delete("/delete-pet/:petId", authMiddleware, async (req, res) => {
   if (!req.body) {
     res.status(401).json({ message: "your information is not complete" });
   } else {
-    const { pet_id } = req.body;
+    const pet_id = req.params.petId;
+    console.log("Express", pet_id);
+
     try {
       const deletedPet = await petFunc.deletePet(pet_id);
-      if (deletedPet) {
+      if (deletedPet == true) {
         res.json({
           deletedPet: true,
         });
@@ -244,7 +245,6 @@ app.delete("/delete-pet", authMiddleware, async (req, res) => {
   }
 });
 
-//SEGUIR UNA VEZ QUE PUEDA SUBIR/MODIFICAR MASCOTAS DESDE EL FRONT
 app.get("/pets-around", async (req, res) => {
   const { lat, lng } = req.query;
   const queryResult = await petFunc.searchPetsAround(lat, lng);
@@ -259,9 +259,10 @@ app.post("/report-pet", async (req, res) => {
     try {
       const report = await reportPet(req.body, pet_id);
       if (report == true) {
-        const { user_id, petName } = await petFunc.searchPet(pet_id);
+        const foundPet = (await petFunc.searchPet(pet_id)) as any;
+        const user_id = foundPet.userId;
+        const petName = foundPet.fullname;
         const { userEmail } = await searchUser(user_id);
-        //VER DE EXTRAER ESTO EN UNA FUNCIÓN
         const msg = {
           to: userEmail,
           from: "ferdr89dev@gmail.com",
@@ -310,13 +311,13 @@ app.get("/test-report", async (req, res) => {
 //Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
 // lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
 
-app.use(express.static(path.resolve(__dirname, "../fe-dist")));
+// app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
-// app.use(express.static(path.resolve(__dirname, "../dist")));
+app.use(express.static(path.resolve(__dirname, "../dist")));
 
 app.get("*", (req, res) => {
-  const ruta = path.resolve(__dirname, "../fe-src/index.html");
-  // const ruta = path.resolve(__dirname, "../dist/index.html");
+  // const ruta = path.resolve(__dirname, "../fe-src/index.html");
+  const ruta = path.resolve(__dirname, "../dist/index.html");
   res.sendFile(ruta);
 });
 

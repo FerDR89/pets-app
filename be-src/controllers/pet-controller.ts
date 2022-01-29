@@ -49,10 +49,17 @@ async function getMyPets(user_id) {
 async function updatePet(dataPet, pet_id) {
   const { fullname, imgURL, lost_geo_lat, lost_geo_lng, found_it, place_lost } =
     dataPet;
+
   const img = await uploadPetImg(imgURL);
+
   await Pet.update(
     {
-      ...dataPet,
+      fullname,
+      imgURL: img.secure_url,
+      lost_geo_lat: parseFloat(lost_geo_lat),
+      lost_geo_lng: parseFloat(lost_geo_lng),
+      place_lost,
+      found_it,
     },
     {
       where: {
@@ -67,6 +74,8 @@ async function updatePet(dataPet, pet_id) {
       lng: lost_geo_lng,
     },
   });
+  console.log(Pet);
+
   return true;
 }
 
@@ -77,16 +86,15 @@ async function deletePet(pet_id: number) {
     },
   });
   algoliaPets.deleteObject(pet_id.toString());
-  return deletePet;
+
+  console.log(deletePet);
+
+  return true;
 }
 
 async function searchPet(pet_id: number) {
   const foundPet = await Pet.findByPk(pet_id);
-  const objectPet = {
-    user_id: foundPet.get("userId"),
-    petName: foundPet.get("fullname"),
-  };
-  return objectPet;
+  return foundPet;
 }
 
 async function searchPetsAround(lat, lng) {

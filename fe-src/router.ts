@@ -6,7 +6,7 @@ const router = new Router(rootEl);
 router.setRoutes([
   { path: "/", component: "x-welcome-page" },
   { path: "/welcome", component: "x-welcome-page" },
-  { path: "/edit-pet", component: "x-edit-pets-page" },
+  { path: "/edit-pet", component: "x-edit-pet-page" },
   { path: "/me", component: "x-me-page" },
   { path: "/my-pets", component: "x-my-pets-page" },
   { path: "/pets-around", component: "x-pets-around-page" },

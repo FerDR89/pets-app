@@ -62,14 +62,14 @@ class PetsAroundPage extends HTMLElement {
         (pet) =>
           `<custom-card petId="${pet.id}" petImg="${pet.imgURL}" petName="${pet.fullname}" petLoc="${pet.place_lost}" cardView="link"></custom-card>`
       )}  
-      `;
+        `;
     } else {
       const containerTitleEl = this.shadow.querySelector(
         ".pets-around__container-title"
       );
       containerTitleEl.innerHTML = `
-      <custom-text tag="h1" size="40px">Lo sentimos, no encontramos mascotas perdidas en las cercanias de tu ubicación</custom-text>
-      `;
+          <custom-text tag="h1" size="40px">Lo sentimos, no encontramos mascotas perdidas en las cercanias de tu ubicación</custom-text>
+          `;
     }
   }
 
@@ -92,7 +92,7 @@ class PetsAroundPage extends HTMLElement {
       <div class="modal__exit-line2"></div>
       </div>
       <div class="modal__container-title">
-        <custom-text tag="h1" size="40px">Reportar info de Pickachu</custom-text>
+        <custom-text tag="h1" size="40px">Reportar info</custom-text>
       </div>
     <form class="modal__form">
       <fieldset class="modal__fieldset">

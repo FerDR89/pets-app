@@ -7,11 +7,22 @@ class MyPetsPage extends HTMLElement {
     this.shadow = this.attachShadow({ mode: "open" });
   }
   connectedCallback() {
-    // state.getMyPets(() => {
-    this.render();
-    // });
+    state.getMyPets(() => {
+      this.render();
+    });
   }
-  listeners() {}
+  listeners() {
+    const cardsEl = this.shadow.querySelectorAll("custom-card");
+    for (const card of cardsEl) {
+      card.addEventListener("report", (e) => {
+        const event = e as any;
+        const petId = event.detail.petId;
+        state.getMyPet(petId, () => {
+          Router.go("/edit-pet");
+        });
+      });
+    }
+  }
 
   selectDataRender() {
     const cs = state.getState();
@@ -106,4 +117,4 @@ class MyPetsPage extends HTMLElement {
     this.listeners();
   }
 }
-window.customElements.define("x-my-pets-page", MyPetsPage);
+customElements.define("x-my-pets-page", MyPetsPage);
