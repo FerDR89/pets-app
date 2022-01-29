@@ -88,8 +88,8 @@ class MePage extends HTMLElement {
             id="name"
             name="name"
             type="text"
-            placeholder=${userName}
             autofocus
+            placeholder=${userName}
           />
       </fieldset>
       <fieldset class="me-page__fieldset-pass">
