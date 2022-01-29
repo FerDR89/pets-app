@@ -245,79 +245,16 @@ app.delete("/delete-pet/:petId", authMiddleware, async (req, res) => {
   }
 });
 
-app.get("/pets-around", async (req, res) => {
-  const { lat, lng } = req.query;
-  const queryResult = await petFunc.searchPetsAround(lat, lng);
-  res.json(queryResult);
-});
-
-app.post("/report-pet", async (req, res) => {
-  const { pet_id } = req.body;
-  if (!req.body) {
-    res.status(401).json({ message: "your information is not complete" });
-  } else {
-    try {
-      const report = await reportPet(req.body, pet_id);
-      if (report == true) {
-        const foundPet = (await petFunc.searchPet(pet_id)) as any;
-        const user_id = foundPet.userId;
-        const petName = foundPet.fullname;
-        const { userEmail } = await searchUser(user_id);
-        const msg = {
-          to: userEmail,
-          from: "ferdr89dev@gmail.com",
-          subject: `Creemos que encontramos a ${petName}, por favor ponte en contacto con quien lo vio`,
-          text: `Nombre: ${req.body.guessName},phone: ${parseInt(
-            req.body.guessPhone
-          )},report: ${req.body.guessReportPet}`,
-        };
-        sgMail
-          .send(msg)
-          .then(() => {
-            console.log("Email sent");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        res.json({ reported: true });
-      } else {
-        res.status(501).json({
-          message: "error server",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-});
-
-app.get("/test-user", async (req, res) => {
-  const user = await User.findAll();
-  res.json({ user });
-});
-app.get("/test-auth", async (req, res) => {
-  const auth = await Auth.findAll();
-  res.json({ auth });
-});
-app.get("/test-pet", async (req, res) => {
-  const pet = await Pet.findAll();
-  res.json({ pet });
-});
-app.get("/test-report", async (req, res) => {
-  const report = await Report.findAll();
-  res.json({ report });
-});
-
 //Mediante este handler le indico que cualquier get que reciba y no encuentre en los endpoints anteriores
 // lo redirija al front-end (cambiar path a fe-dist para cuando hacemos el deploy).
 
-// app.use(express.static(path.resolve(__dirname, "../fe-dist")));
+app.use(express.static(path.resolve(__dirname, "../fe-dist")));
 
-app.use(express.static(path.resolve(__dirname, "../dist")));
+// app.use(express.static(path.resolve(__dirname, "../dist")));
 
 app.get("*", (req, res) => {
-  // const ruta = path.resolve(__dirname, "../fe-src/index.html");
-  const ruta = path.resolve(__dirname, "../dist/index.html");
+  const ruta = path.resolve(__dirname, "../fe-src/index.html");
+  // const ruta = path.resolve(__dirname, "../dist/index.html");
   res.sendFile(ruta);
 });
 
