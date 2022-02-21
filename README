@@ -1,2 +1,21 @@
-Doc Postman: https://documenter.getpostman.com/view/17432860/UVeCQU3A
-Game URL: https://dwf-m7.herokuapp.com/
+Otro desafío más terminado de la carrera de apx.school
+Este módulo estuvo enteramente enfocado en ampliar conceptos sobre backend y aprender sobre base de datos relaciones.
+El objetivo de esta webapp es permitir registrarnos y publicar mascotas perdidas. A su vez, dando nuestra ubicación (sin la necesidad de registrarse) podemos ver mascotas que se encuentran a nuestro alrededor, seleccionar una mascota y llenar un pequeño formulario el cual informa a través de un correo electrónico al usuario que publico esa mascota donde fue visto y los datos de contacto de quien lo vio.
+La base de datos utilizada para la persistencia de los usuarios, mascotas y reportes fue PostgreSQL a través de Heroku Postgres. A su vez, para la gestión de Postgre, utilizamos la librería Sequelize.
+Para llevar a cabo las búsquedas de geolocalización, utilizamos la base de datos de Algolia.
+Todo el backend fue desarrollado mediante los principios restful utilizando una arquitectura MVC para separar el mismo en capas.
+El front-end fue desarrollado mediante Web Components, Pages, State Manager para la interacción con el back-end y un Router para el manejo de las rutas/pages. Todo fue desarrollado mediante el principio Mobile First (No se desarrolló la vista desktop, todavía…).
+
+Para capturar la ubicación del usuario, se utilizó la API de geolocalización del navegador.
+En cuanto a la carga de imágenes de las mascotas, se utilizó la librería dropzone en el front-end y cloudinary en el backend para su persistencia.
+
+En cuanto la carga de la geolocalización de las mascotas, se utilizo la API de Mapbox.
+
+Todos los endpoints fueron documentados mediante Postman.
+
+Tecnologías utilizadas: TypeScript, ExpressJs, PostgreSQL, Algolia, Cloudinary
+Librerías utilizadas: Sengrid, Vaadin/Router, DropZone, Mapbox, Sequelize, JsonWebToken
+Herramientas: Parcel, AirTable
+
+Link Deploy: https://dwf-m7.herokuapp.com/
+Link documentación: https://documenter.getpostman.com/view/17432860/UVeCQU3A

@@ -59,7 +59,7 @@ class CustomCard extends HTMLElement {
           <div class="card__text-container">
             <div class="card__info-container">
                 <div class="card__name-container">
-                  <custom-text tag="h3" size="40px">${this.petName}</custom-text>
+                  <custom-text tag="h3" size="24px">${this.petName}</custom-text>
                 </div>
                 <div class="card__location-container">
                   <custom-text size="16px">${this.petLoc}</custom-text>
