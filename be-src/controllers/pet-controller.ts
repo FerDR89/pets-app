@@ -50,30 +50,69 @@ async function updatePet(dataPet, pet_id) {
   const { fullname, imgURL, lost_geo_lat, lost_geo_lng, found_it, place_lost } =
     dataPet;
 
-  const img = await uploadPetImg(imgURL);
+  const objectData = {};
 
-  await Pet.update(
-    {
-      fullname,
-      imgURL: img.secure_url,
-      lost_geo_lat: parseFloat(lost_geo_lat),
-      lost_geo_lng: parseFloat(lost_geo_lng),
-      place_lost,
-      found_it,
-    },
-    {
-      where: {
-        id: pet_id,
-      },
-    }
-  );
-  algoliaPets.partialUpdateObject({
-    objectID: pet_id,
-    _geoloc: {
-      lat: lost_geo_lat,
-      lng: lost_geo_lng,
+  if (imgURL) {
+    const img = await uploadPetImg(imgURL);
+    objectData["imgURL"] = img.secure_url;
+  }
+  if (fullname) {
+    objectData["fullname"] = fullname;
+  }
+
+  if (lost_geo_lat && lost_geo_lng) {
+    objectData["lost_geo_lat"] = parseFloat(lost_geo_lat);
+    objectData["lost_geo_lng"] = parseFloat(lost_geo_lng);
+  }
+
+  if (place_lost) {
+    objectData["place_lost"] = place_lost;
+  }
+
+  if (found_it) {
+    objectData["found_it"] = found_it;
+  }
+
+  await Pet.update(objectData, {
+    where: {
+      id: pet_id,
     },
   });
+
+  // await Pet.update(
+  //   {
+  //     fullname,
+  //     imgURL: img.secure_url,
+  //     lost_geo_lat: parseFloat(lost_geo_lat),
+  //     lost_geo_lng: parseFloat(lost_geo_lng),
+  //     place_lost,
+  //     found_it,
+  //   },
+  //   {
+  //     where: {
+  //       id: pet_id,
+  //     },
+  //   }
+  // );
+
+  if (lost_geo_lat && lost_geo_lng) {
+    algoliaPets.partialUpdateObject({
+      objectID: pet_id,
+      _geoloc: {
+        lat: lost_geo_lat,
+        lng: lost_geo_lng,
+      },
+    });
+  }
+
+  // algoliaPets.partialUpdateObject({
+  //   objectID: pet_id,
+  //   _geoloc: {
+  //     lat: lost_geo_lat,
+  //     lng: lost_geo_lng,
+  //   },
+  // });
+
   console.log(Pet);
 
   return true;
