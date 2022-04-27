@@ -19,7 +19,7 @@ import { Auth, User, Pet, Report } from "./models/models";
 const app = express();
 const port = process.env.PORT || 3000;
 
-const allowedHosts = ["http://127.0.0.1:8080"];
+const allowedHosts = ["https://petrescuereact.web.app/"];
 
 app.use(
   cors({
