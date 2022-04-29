@@ -21,7 +21,7 @@ const port = process.env.PORT || 3000;
 
 const allowedHosts = [
   "https://petrescuereact.web.app",
-  "http://127.0.0.1:8080/",
+  "http://127.0.0.1:8080",
 ];
 
 app.use(
