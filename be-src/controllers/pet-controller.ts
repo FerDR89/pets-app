@@ -151,7 +151,7 @@ async function searchPetsAround(lat, lng) {
     where: {
       id: petsIdCol,
     },
-    attributes: ["id", "fullname", "imgURL", "place_lost"],
+    attributes: ["id", "fullname", "imgURL", "place_lost", "found_it"],
   });
 
   return petsAround;
